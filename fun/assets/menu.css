@@ -6,6 +6,7 @@
   --line: #ececec;
   --bg: #ffffff;
   --soft: #f6f6f6;
+  --tint: #fff1ec;   /* 그림 배경. menu.js가 THEME soft 색으로 바꿔요 */
   --kakao: #fee500;
   --col: 440px;
   --side-ad: 160px;
@@ -78,6 +79,22 @@ p { margin: 0; }
 .input:focus { border-color: var(--text); }
 .notice { font-size: 13px; margin-top: 12px; }
 
+/* 그림 */
+.ic { display: inline-block; user-select: none; -webkit-user-select: none; }
+.hero {
+  position: relative; height: 220px; margin-top: 4px; border-radius: 20px; background: var(--tint); overflow: hidden;
+}
+.hero .ic { position: absolute; }
+.hero .h0 { width: 128px; height: 128px; font-size: 100px; left: 50%; top: 50%; transform: translate(-50%, -50%); }
+.hero .h1, .hero .h2, .hero .h3, .hero .h4 { width: 56px; height: 56px; font-size: 44px; }
+.hero .h1 { left: 9%; top: 14%; transform: rotate(-12deg); }
+.hero .h2 { right: 9%; top: 12%; transform: rotate(10deg); }
+.hero .h3 { left: 13%; bottom: 12%; transform: rotate(8deg); }
+.hero .h4 { right: 12%; bottom: 14%; transform: rotate(-8deg); }
+.q-pic { margin-top: 18px; }
+.q-pic .ic { width: 64px; height: 64px; font-size: 52px; }
+.q-pic + .q-text { margin-top: 10px; }
+
 /* 질문 */
 .progress { height: 3px; background: var(--line); }
 .progress > div { height: 100%; background: var(--primary); transition: width .25s ease; }
@@ -89,18 +106,24 @@ p { margin: 0; }
   padding: 16px; border: 1px solid var(--line); border-radius: 12px; background: #fff;
   font-size: 16px; text-align: left;
 }
-.choice .em { font-size: 20px; width: 24px; text-align: center; }
+.choice .em { width: 30px; height: 30px; flex: none; font-size: 24px; text-align: center; }
 .choice:hover { border-color: #cfcfcf; }
 .choice.on { border-color: var(--primary); color: var(--primary); font-weight: 700; }
 
 /* 고르는 중 */
-.roulette { text-align: center; padding: 80px 0; border: 0; }
-.slot { font-size: 64px; line-height: 1; height: 72px; }
+.roulette { text-align: center; padding: 70px 0; border: 0; }
+.slot { height: 120px; display: flex; justify-content: center; }
+.slot .ic { width: 120px; height: 120px; font-size: 96px; line-height: 120px; }
 .slot-name { font-size: 18px; font-weight: 700; margin-top: 14px; min-height: 28px; }
 
 /* 결과 */
 .result { text-align: center; }
-.menu-em { font-size: 72px; line-height: 1; margin: 14px 0 12px; }
+.plate {
+  width: 180px; height: 180px; margin: 14px auto 16px; border-radius: 50%;
+  background: var(--tint); display: flex; align-items: center; justify-content: center;
+}
+.plate .ic { width: 120px; height: 120px; font-size: 96px; line-height: 120px; text-align: center; animation: pop .35s ease; }
+@keyframes pop { from { transform: scale(.7); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 .menu-name { font-size: 32px; font-weight: 800; letter-spacing: -0.8px; }
 .menu-desc { color: #555; margin: 8px 0 0; word-break: keep-all; }
 .reasons { list-style: none; padding: 0; margin: 20px 0 8px; text-align: left; border-top: 1px solid var(--line); }
@@ -110,13 +133,13 @@ p { margin: 0; }
   display: flex; align-items: center; gap: 12px; width: 100%; padding: 14px 16px;
   border: 1px solid var(--line); border-radius: 12px; background: #fff; font-size: 15px; text-align: left;
 }
-.alt .em { font-size: 22px; }
+.alt .em { width: 32px; height: 32px; flex: none; font-size: 26px; text-align: center; }
 
 /* 다른 메추 */
 .more-list { display: flex; flex-direction: column; }
 .more-item { display: flex; align-items: center; gap: 12px; padding: 12px 0; text-decoration: none; border-bottom: 1px solid var(--line); }
 .more-item:last-child { border-bottom: 0; }
-.more-item .em { font-size: 22px; width: 28px; text-align: center; }
+.more-item .em { width: 30px; height: 30px; flex: none; font-size: 24px; text-align: center; }
 .more-item b { font-size: 15px; }
 .more-item small { color: var(--muted); font-size: 13px; margin-left: auto; }
 .foot { text-align: center; font-size: 13px; color: var(--muted); padding: 8px 0 20px; }

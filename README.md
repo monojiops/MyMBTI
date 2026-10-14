@@ -28,3 +28,5 @@
 
 ## 광고
 카카오 애드핏(adfit.kakao.com)에서 매체 등록(monojilab.com) → 광고단위 160x600, 320x50 생성 → `config.js`에 `AD_PROVIDER: 'adfit'`과 단위 ID 입력
+
+메추 화면의 그림은 Google Noto Emoji(Apache License 2.0) SVG를 `fun/assets/emoji/`에 넣어 쓴 거예요. 파일 이름은 이모지 코드포인트(예: 1f355.svg)이고, 새 이모지를 쓰면 `https://fonts.gstatic.com/s/e/notoemoji/latest/<코드>/emoji.svg`에서 받아 넣으면 돼요. 파일이 없으면 글자 이모지로 보여요.

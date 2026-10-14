@@ -1,5 +1,5 @@
 // ==============================================
-//  메추 시리즈 공통 엔진 (점메추, 저메추, 디메추, 술메추)
+//  메추 시리즈 공통 엔진 (점메추, 저메추, 디메추, 술메추, 야메추)
 //  각 페이지는 js/config.js(THEME)와 js/data.js(QUESTIONS, MENUS)만 다르게 둡니다.
 //
 //  질문 type
@@ -36,6 +36,7 @@
 
   // 테마 색
   document.documentElement.style.setProperty('--primary', T.colors.b);
+  document.documentElement.style.setProperty('--tint', T.colors.soft);
 
   // ---------- 유틸 ----------
   function esc(s) {
@@ -52,6 +53,11 @@
     const top = `<div class="topbar"><a href="../">← monojilab fun</a><span>${T.short}</span></div>`;
     app.innerHTML = `<div class="fade-in">${top}${html}</div>`;
     window.scrollTo({ top: 0 });
+  }
+  // 이모지를 그림(Noto Emoji SVG, ../assets/emoji/)으로 보여줘요. 파일이 없으면 글자 이모지로 대체
+  function ic(em, cls) {
+    const cp = Array.from(em).map(c => c.codePointAt(0)).filter(c => c !== 0xfe0f).map(c => c.toString(16)).join('_');
+    return `<img class="ic ${cls || ''}" src="../assets/emoji/${cp}.svg" alt="${esc(em)}" draggable="false" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:this.className,textContent:this.alt}))">`;
   }
   function byId(id) { return MENUS.find(m => m.id === id); }
   function mapUrl(m) { return `https://map.kakao.com/link/search/${encodeURIComponent(m.q || m.name.split(/[·+]/)[0])}`; }
@@ -154,7 +160,7 @@
     const invite = sh ? `
       <section class="result">
         <p class="label">${sh.name ? esc(sh.name) + '님의' : '친구의'} ${T.inviteWord}</p>
-        <div class="menu-em">${sh.menu.em}</div>
+        <div class="plate">${ic(sh.menu.em)}</div>
         <div class="menu-name">${esc(sh.menu.name)} 어때요?</div>
         <p class="menu-desc">${esc(sh.menu.desc)}</p>
         <a class="btn dark" style="margin-top:20px" href="${mapUrl(sh.menu)}" target="_blank" rel="noopener">${placeLabel(sh.menu)}</a>
@@ -162,7 +168,10 @@
 
     render(`
       ${invite}
-      <section>
+      <div class="hero">
+        ${heroPics().map((e, k) => ic(e, 'h' + k)).join('')}
+      </div>
+      <section style="padding-top:20px">
         <p class="label">${T.short}</p>
         <h1>${T.title}</h1>
         <p class="muted">${T.tagline} 질문 ${Q.length}개에 답하면 ${MENUS.length}가지 중에서 골라드려요.</p>
@@ -174,9 +183,9 @@
       ${moreHtml()}
     `);
     const readName = () => { state.name = document.getElementById('name').value.trim().slice(0, 10); };
-    app.querySelector('[data-act="start"]').onclick = () => { readName(); state.answers = {}; state.idx = 0; viewQuiz(); };
+    app.querySelector('[data-act="start"]').onclick = () => { readName(); preload(); state.answers = {}; state.idx = 0; viewQuiz(); };
     app.querySelector('[data-act="random"]').onclick = () => {
-      readName();
+      readName(); preload();
       state.answers = {};
       state.ranked = MENUS.slice().sort(() => Math.random() - 0.5);
       state.pos = 0;
@@ -193,9 +202,10 @@
       <div class="progress"><div style="width:${((i + 1) / Q.length) * 100}%"></div></div>
       <section style="border:0">
         <p class="q-meta">${i + 1} / ${Q.length}</p>
+        <div class="q-pic">${ic(q.em)}</div>
         <p class="q-text">${esc(q.text)}</p>
         <div class="choices">
-          ${q.opts.map((o, k) => `<button class="choice${cur === o.key ? ' on' : ''}" data-k="${k}"><span class="em">${o.em}</span>${esc(o.label)}</button>`).join('')}
+          ${q.opts.map((o, k) => `<button class="choice${cur === o.key ? ' on' : ''}" data-k="${k}">${ic(o.em, 'em')}${esc(o.label)}</button>`).join('')}
         </div>
         <button class="btn ghost" data-act="back" style="margin-top:16px">${i === 0 ? '처음으로' : '이전 질문'}</button>
       </section>
@@ -230,7 +240,7 @@
     let n = 0, delay = 60;
     const tick = () => {
       const m = MENUS[Math.floor(Math.random() * MENUS.length)];
-      slot.textContent = m.em; nm.textContent = m.name;
+      slot.innerHTML = ic(m.em); nm.textContent = m.name;
       n++; delay *= 1.12;
       if (n < 14) setTimeout(tick, delay); else viewResult();
     };
@@ -247,7 +257,7 @@
     render(`
       <section class="result">
         <p class="label">${state.name ? esc(state.name) + '님의' : '오늘의'} ${T.resultWord}</p>
-        <div class="menu-em">${m.em}</div>
+        <div class="plate">${ic(m.em)}</div>
         <div class="menu-name">${esc(m.name)}</div>
         <p class="menu-desc">${esc(m.desc)}</p>
         ${why.length ? `<ul class="reasons">${why.map(r => `<li>${r}</li>`).join('')}</ul>` : ''}
@@ -257,7 +267,7 @@
 
       <section>
         <h3>이것도 괜찮아요</h3>
-        <div class="alts">${alts.map((x, k) => `<button class="alt" data-alt="${k + 1}"><span class="em">${x.em}</span>${esc(x.name)}</button>`).join('')}</div>
+        <div class="alts">${alts.map((x, k) => `<button class="alt" data-alt="${k + 1}">${ic(x.em, 'em')}${esc(x.name)}</button>`).join('')}</div>
       </section>
 
       <section>
@@ -279,15 +289,30 @@
     });
   }
 
+  // 시작 화면 그림: 대표 그림 1개 + 메뉴 그림 4개
+  // 고르는 중 화면에서 그림이 비지 않게 메뉴 그림을 미리 받아둬요
+  function preload() {
+    if (preload.done) return; preload.done = true;
+    const box = document.createElement('div');
+    box.innerHTML = MENUS.map(m => ic(m.em)).join('');
+    box.querySelectorAll('img').forEach(i => { new Image().src = i.src; });
+  }
+
+  function heroPics() {
+    const pics = (T.heroEmojis || []).filter(e => e !== T.icon).slice(0, 4);
+    MENUS.forEach(m => { if (pics.length < 4 && !pics.includes(m.em)) pics.push(m.em); });
+    return [T.icon].concat(pics);
+  }
+
   function moreHtml() {
     const here = location.pathname.split('/').filter(Boolean).pop();
     const items = FAMILY.filter(f => f.path !== here).map(f => `
-        <a class="more-item" href="../${f.path}/"><span class="em">${f.em}</span><b>${f.title}</b><small>${f.sub}</small></a>`).join('');
+        <a class="more-item" href="../${f.path}/">${ic(f.em, 'em')}<b>${f.title}</b><small>${f.sub}</small></a>`).join('');
     return `
       <section>
         <h3>다른 메추</h3>
         <div class="more-list">${items}
-          <a class="more-item" href="../office-mbti/"><span class="em">💼</span><b>직장인 MBTI</b><small>회사에서 나는?</small></a>
+          <a class="more-item" href="../office-mbti/">${ic('💼', 'em')}<b>직장인 MBTI</b><small>회사에서 나는?</small></a>
         </div>
       </section>
       <p class="foot"><a href="../">monojilab fun</a></p>`;
