@@ -154,7 +154,9 @@
       content: {
         title: `${who} ${c.emoji} ${c.name} (${p.type})`,
         description: `${c.tag}. 우리 같은 팀이면 케미 몇 점일까?`,
-        imageUrl: cfg.SHARE_IMAGE,
+        imageUrl: `${cfg.SITE_URL}/share/${charId(p)}.png`,
+        imageWidth: 800,
+        imageHeight: 400,
         link: { mobileWebUrl: url, webUrl: url },
       },
       buttons: [{ title: '나도 하고 케미 보기', link: { mobileWebUrl: url, webUrl: url } }],

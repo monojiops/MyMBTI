@@ -30,3 +30,5 @@
 카카오 애드핏(adfit.kakao.com)에서 매체 등록(monojilab.com) → 광고단위 160x600, 320x50 생성 → `config.js`에 `AD_PROVIDER: 'adfit'`과 단위 ID 입력
 
 메추 화면의 그림은 Google Noto Emoji(Apache License 2.0) SVG를 `fun/assets/emoji/`에 넣어 쓴 거예요. 파일 이름은 이모지 코드포인트(예: 1f355.svg)이고, 새 이모지를 쓰면 `https://fonts.gstatic.com/s/e/notoemoji/latest/<코드>/emoji.svg`에서 받아 넣으면 돼요. 파일이 없으면 글자 이모지로 보여요.
+
+카톡 공유 이미지(800x400)는 `tools/make-share-images.js`로 만들어요. 메추는 `fun/<메추>/share/<메뉴id>.png`, 직장인 MBTI는 `fun/office-mbti/share/<유형>.png`이고 각 페이지 og.png도 같이 다시 만들어져요. 메뉴나 유형을 추가하면 로컬 서버(python3 -m http.server 8765)를 켠 채로 다시 실행하세요.

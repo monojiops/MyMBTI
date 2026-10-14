@@ -136,7 +136,9 @@
       content: {
         title: `${T.sharePrefix} ${m.em} ${m.name} 어때요?`,
         description: `${state.name ? state.name + '님이' : '친구가'} ${T.short} 받은 메뉴예요. ${m.desc}`,
-        imageUrl: cfg.SHARE_IMAGE,
+        imageUrl: `${cfg.SITE_URL}/share/${m.id}.png`,
+        imageWidth: 800,
+        imageHeight: 400,
         link: { mobileWebUrl: url, webUrl: url },
       },
       buttons: [{ title: `나도 ${T.short} 받기`, link: { mobileWebUrl: url, webUrl: url } }],
