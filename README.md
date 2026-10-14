@@ -5,6 +5,7 @@
 - `index.html` 첫 화면: 테스트 목록
 - `fun/` 재밌는 콘텐츠 모음 → https://monojilab.com/fun/
 - `fun/office-mbti/` MBTI 직장인 유형 테스트 → https://monojilab.com/fun/office-mbti/
+- `fun/lunch/` 오늘의 점심메뉴는? (점메추) → https://monojilab.com/fun/lunch/
 - `office-mbti/`, `lab/` 예전 주소. 새 주소로 넘겨주는 페이지만 남아 있어요
   - `js/config.js` 카카오 키, 광고 설정
   - `js/data.js` 질문, 40가지 유형, 궁합표
