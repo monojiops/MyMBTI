@@ -382,6 +382,7 @@
     const side = document.getElementById('ad-side');
     const bottom = document.getElementById('ad-bottom');
     const p = cfg.AD_PROVIDER;
+    if (!p || p === 'none') { side.style.display = 'none'; bottom.style.display = 'none'; return; }
     if (p === 'adfit') {
       side.innerHTML = `<ins class="kakao_ad_area" style="display:none;" data-ad-unit="${cfg.ADFIT.SIDE_UNIT}" data-ad-width="160" data-ad-height="600"></ins>`;
       bottom.innerHTML = `<ins class="kakao_ad_area" style="display:none;" data-ad-unit="${cfg.ADFIT.BOTTOM_UNIT}" data-ad-width="320" data-ad-height="50"></ins>`;
@@ -389,16 +390,18 @@
       s.async = true; s.src = 'https://t1.daumcdn.net/kas/static/ba.min.js';
       document.body.appendChild(s);
     } else if (p === 'adsense') {
-      const s = document.createElement('script');
-      s.async = true; s.crossOrigin = 'anonymous';
-      s.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${cfg.ADSENSE.CLIENT}`;
-      document.head.appendChild(s);
+      if (!document.querySelector('script[src*="adsbygoogle.js"]')) {
+        const s = document.createElement('script');
+        s.async = true; s.crossOrigin = 'anonymous';
+        s.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${cfg.ADSENSE.CLIENT}`;
+        document.head.appendChild(s);
+      }
       side.innerHTML = `<ins class="adsbygoogle" style="display:inline-block;width:160px;height:600px" data-ad-client="${cfg.ADSENSE.CLIENT}" data-ad-slot="${cfg.ADSENSE.SIDE_SLOT}"></ins>`;
       bottom.innerHTML = `<ins class="adsbygoogle" style="display:inline-block;width:320px;height:50px" data-ad-client="${cfg.ADSENSE.CLIENT}" data-ad-slot="${cfg.ADSENSE.BOTTOM_SLOT}"></ins>`;
       // 화면 크기에 맞는 쪽만 채움 (숨겨진 슬롯은 광고 오류가 남)
       const visible = window.matchMedia('(min-width: 900px)').matches ? side : bottom;
       visible.querySelectorAll('.adsbygoogle').forEach(() => (window.adsbygoogle = window.adsbygoogle || []).push({}));
-    } else {
+    } else if (p === 'preview') {
       side.innerHTML = '<div class="ad-placeholder" style="width:160px;height:600px">광고 영역<br>160 × 600</div>';
       bottom.innerHTML = '<div class="ad-placeholder" style="width:320px;height:50px">광고 영역 320 × 50</div>';
     }

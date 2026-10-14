@@ -13,7 +13,7 @@ window.SITE_CONFIG = {
   // 카카오 공유 미리보기 이미지 (절대 주소, 800x400 권장)
   SHARE_IMAGE: 'https://monojilab.com/office-mbti/og.png',
 
-  // 광고 설정: 'none' | 'adfit' | 'adsense'
+  // 광고 설정: 'none'(숨김) | 'preview'(자리 표시) | 'adfit' | 'adsense'
   AD_PROVIDER: 'none',
 
   // 카카오 애드핏 (adfit.kakao.com 에서 광고단위 생성)
@@ -24,7 +24,7 @@ window.SITE_CONFIG = {
 
   // 구글 애드센스
   ADSENSE: {
-    CLIENT: 'ca-pub-XXXXXXXXXXXXXXXX',
+    CLIENT: 'ca-pub-9664453480957778',
     SIDE_SLOT: '0000000000',
     BOTTOM_SLOT: '0000000000',
   },
