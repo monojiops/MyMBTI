@@ -8,7 +8,7 @@ window.SITE_CONFIG = {
 
   // 카카오 개발자 콘솔 > 내 애플리케이션 > 앱 키 > JavaScript 키
   // 비워두면 카카오톡 버튼 대신 "링크 복사"가 동작합니다.
-  KAKAO_JS_KEY: '',
+  KAKAO_JS_KEY: '08c9afec931484a9136fc232675f181e',
 
   // 카카오 공유 미리보기 이미지 (절대 주소, 800x400 권장)
   SHARE_IMAGE: 'https://monojilab.com/office-mbti/og.png',
