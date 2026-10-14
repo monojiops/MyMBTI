@@ -4,14 +4,14 @@
 window.SITE_CONFIG = {
   // 사이트 이름과 배포 주소 (끝에 / 없이). 카카오 공유 링크에 쓰입니다.
   SITE_NAME: 'MBTI 직장인 유형 테스트',
-  SITE_URL: 'https://YOUR-DOMAIN.com',
+  SITE_URL: 'https://monojilab.com/office-mbti',
 
   // 카카오 개발자 콘솔 > 내 애플리케이션 > 앱 키 > JavaScript 키
   // 비워두면 카카오톡 버튼 대신 "링크 복사"가 동작합니다.
   KAKAO_JS_KEY: '',
 
   // 카카오 공유 미리보기 이미지 (절대 주소, 800x400 권장)
-  SHARE_IMAGE: 'https://YOUR-DOMAIN.com/og.png',
+  SHARE_IMAGE: 'https://monojilab.com/office-mbti/og.png',
 
   // 광고 설정: 'none' | 'adfit' | 'adsense'
   AD_PROVIDER: 'none',
