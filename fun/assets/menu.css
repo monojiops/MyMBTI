@@ -17,7 +17,7 @@ html, body { margin: 0; }
 body {
   background: var(--bg);
   color: var(--text);
-  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif;
+  font-family: 'Gowun Dodum', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif;
   line-height: 1.55;
   -webkit-font-smoothing: antialiased;
   padding-bottom: 70px;
@@ -136,12 +136,15 @@ p { margin: 0; }
 .alt .em { width: 32px; height: 32px; flex: none; font-size: 26px; text-align: center; }
 
 /* 다른 메추 */
-.more-list { display: flex; flex-direction: column; }
-.more-item { display: flex; align-items: center; gap: 12px; padding: 12px 0; text-decoration: none; border-bottom: 1px solid var(--line); }
-.more-item:last-child { border-bottom: 0; }
-.more-item .em { width: 30px; height: 30px; flex: none; font-size: 24px; text-align: center; }
-.more-item b { font-size: 15px; }
-.more-item small { color: var(--muted); font-size: 13px; margin-left: auto; }
+.more-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+.more-card, .more-wide { background: var(--soft); border-radius: 16px; text-decoration: none; color: var(--text); }
+.more-card { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 18px 8px 16px; text-align: center; }
+.more-card .em { width: 52px; height: 52px; font-size: 42px; margin-bottom: 6px; }
+.more-card b { font-size: 15px; }
+.more-card small, .more-wide small { color: var(--muted); font-size: 12px; word-break: keep-all; }
+.more-wide { display: flex; align-items: center; gap: 14px; padding: 14px 16px; margin-top: 8px; }
+.more-wide .em { width: 40px; height: 40px; font-size: 32px; flex: none; }
+.more-wide b { display: block; font-size: 15px; }
 .foot { text-align: center; font-size: 13px; color: var(--muted); padding: 8px 0 20px; }
 
 .toast {
@@ -152,3 +155,16 @@ p { margin: 0; }
 .toast.show { opacity: 1; }
 .fade-in { animation: fade .25s ease; }
 @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+
+/* 제목, 버튼, 메뉴 이름은 둥근 글씨(Jua). Jua는 굵기가 하나라 font-weight는 400으로 */
+h1, h3, .btn, .q-text, .menu-name, .slot-name, .choice, .alt, .more-card b, .more-wide b {
+  font-family: 'Jua', 'Gowun Dodum', sans-serif; font-weight: 400; letter-spacing: 0;
+}
+.btn.ghost { font-family: inherit; }
+h1 { font-size: 30px; }
+h3 { font-size: 17px; }
+.q-text { font-size: 24px; }
+.menu-name { font-size: 34px; }
+.btn { font-size: 17px; }
+.choice { font-size: 17px; }
+.choice.on { font-weight: 400; }

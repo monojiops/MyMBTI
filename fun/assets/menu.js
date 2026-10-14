@@ -307,13 +307,12 @@
   function moreHtml() {
     const here = location.pathname.split('/').filter(Boolean).pop();
     const items = FAMILY.filter(f => f.path !== here).map(f => `
-        <a class="more-item" href="../${f.path}/">${ic(f.em, 'em')}<b>${f.title}</b><small>${f.sub}</small></a>`).join('');
+        <a class="more-card" href="../${f.path}/">${ic(f.em, 'em')}<b>${f.title}</b><small>${f.sub}</small></a>`).join('');
     return `
       <section>
-        <h3>다른 메추</h3>
-        <div class="more-list">${items}
-          <a class="more-item" href="../office-mbti/">${ic('💼', 'em')}<b>직장인 MBTI</b><small>회사에서 나는?</small></a>
-        </div>
+        <h3>다른 메추도 받아보세요</h3>
+        <div class="more-grid">${items}</div>
+        <a class="more-wide" href="../office-mbti/">${ic('💼', 'em')}<div><b>MBTI 직장인 유형 테스트</b><small>회사에서 나는 어떤 직장인일까?</small></div></a>
       </section>
       <p class="foot"><a href="../">monojilab fun</a></p>`;
   }
