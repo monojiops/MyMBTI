@@ -1,17 +1,45 @@
+// ==============================================
+//  메추 시리즈 공통 엔진 (점메추, 저메추, 디메추, 술메추)
+//  각 페이지는 js/config.js(THEME)와 js/data.js(QUESTIONS, MENUS)만 다르게 둡니다.
+//
+//  질문 type
+//   - kind   : 메뉴의 kind와 같으면 크게 가산 (opt.soft가 true면 다른 종류도 덜 감점)
+//   - level  : 메뉴의 q.field 값(0~2)과 가까울수록 가산. key가 -1이면 무시
+//   - budget : 메뉴 price가 예산을 넘으면 감점
+//   - tag    : opt.boost 태그(기본: [key])가 있으면 가산, opt.avoid 태그가 있으면 감점
+//  opt.why  : 그 선택이 메뉴와 맞았을 때 결과 화면에 보여줄 이유
+// ==============================================
 (() => {
   const cfg = window.SITE_CONFIG;
+  const T = cfg.THEME;
   const Q = window.QUESTIONS;
   const MENUS = window.MENUS;
   const app = document.getElementById('app');
+
+  // 시리즈 목록 (다른 메추로 가는 링크)
+  const FAMILY = [
+    { path: 'lunch', em: '🍱', title: '점메추', sub: '오늘의 점심메뉴는?' },
+    { path: 'dinner', em: '🍖', title: '저메추', sub: '오늘의 저녁메뉴는?' },
+    { path: 'dessert', em: '🍰', title: '디메추', sub: '오늘 먹고 싶은 디저트는?' },
+    { path: 'drink', em: '🍻', title: '술메추', sub: '오늘 한잔, 뭐 마실까?' },
+  ];
 
   const state = {
     name: '',
     answers: {},
     idx: 0,
-    ranked: [],   // 점수 순 메뉴
-    pos: 0,       // 지금 보여주는 순위 (다른 메뉴 누를 때마다 +1)
+    ranked: [],
+    pos: 0,
     shared: readShared(),
   };
+
+  // 테마 색
+  const root = document.documentElement.style;
+  root.setProperty('--grad-a', T.colors.a);
+  root.setProperty('--grad-b', T.colors.b);
+  root.setProperty('--primary', T.colors.b);
+  root.setProperty('--peach', T.colors.soft);
+  root.setProperty('--page-bg', T.colors.bg);
 
   // ---------- 유틸 ----------
   function esc(s) {
@@ -24,55 +52,56 @@
     clearTimeout(toast._t);
     toast._t = setTimeout(() => t.classList.remove('show'), 1800);
   }
-  const TOPBAR = `<div class="topbar"><a href="../">← monojilab <b>fun</b></a><span class="muted">🍱 점메추</span></div>`;
   function render(html) {
-    app.innerHTML = `<div class="fade-in">${TOPBAR}${html}</div>`;
+    const top = `<div class="topbar"><a href="../">← monojilab <b>fun</b></a><span class="muted">${T.icon} ${T.short}</span></div>`;
+    app.innerHTML = `<div class="fade-in">${top}${html}</div>`;
     window.scrollTo({ top: 0 });
   }
   function byId(id) { return MENUS.find(m => m.id === id); }
-  function mapUrl(m) { return `https://map.kakao.com/link/search/${encodeURIComponent(m.name.split(/[·+]/)[0])}`; }
+  function mapUrl(m) { return `https://map.kakao.com/link/search/${encodeURIComponent(m.q || m.name.split(/[·+]/)[0])}`; }
+  function placeLabel(m) { return `📍 근처 ${esc([m.q || m.name, T.placeWord].filter(Boolean).join(' '))} 찾기`; }
+  function optOf(q) { return q.opts.find(o => o.key === state.answers[q.id]); }
 
   // ---------- 추천 ----------
-  function score(m, a) {
+  function score(m) {
     let s = 0;
-    // 당기는 종류
-    s += m.kind === a.kind ? 8 : (a.kind === 'quick' ? -2 : -4);
-    // 맵기 (상관없음이면 무시)
-    if (a.spicy >= 0) s += 4 - 3 * Math.abs(m.spicy - a.spicy);
-    // 예산
-    if (m.price > a.budget) s -= 6 * (m.price - a.budget);
-    if (a.budget === 3 && m.price === 3) s += 3;
-    // 날씨
-    if (a.weather === 'cold') s += m.tags.includes('warm') ? 4 : (m.tags.includes('cool') ? -5 : 0);
-    if (a.weather === 'hot') s += m.tags.includes('cool') ? 6 : (m.kind === 'soup' ? -3 : 0);
-    if (a.weather === 'rain') s += m.tags.includes('rain') ? 5 : (m.tags.includes('cool') ? -3 : 0);
-    // 기분, 누구랑
-    if (m.tags.includes(a.mood)) s += 3;
-    if (m.tags.includes(a.with)) s += 3;
-    if (a.with === 'boss' && m.spicy === 2) s -= 2;
+    Q.forEach(q => {
+      const o = optOf(q);
+      if (!o) return;
+      if (q.type === 'kind') {
+        if (o.key === 'any') return;
+        s += m.kind === o.key ? 8 : (o.soft ? -2 : -4);
+      } else if (q.type === 'level') {
+        if (o.key >= 0) s += 4 - 3 * Math.abs((m[q.field] || 0) - o.key);
+      } else if (q.type === 'budget') {
+        if (m.price > o.key) s -= 6 * (m.price - o.key);
+        if (o.key === 3 && m.price === 3) s += 3;
+      } else {
+        (o.boost || [o.key]).forEach(t => { if (m.tags.includes(t)) s += o.w || 3; });
+        (o.avoid || []).forEach(t => { if (m.tags.includes(t)) s -= 4; });
+      }
+    });
     return s;
   }
   function rank() {
-    const a = state.answers;
     // 같은 답이어도 매번 조금씩 다르게 나오도록 약간의 랜덤을 섞어요
     return MENUS
-      .map(m => ({ m, s: score(m, a) + Math.random() * 2.5 }))
+      .map(m => ({ m, s: score(m) + Math.random() * 2.5 }))
       .sort((x, y) => y.s - x.s)
       .map(x => x.m);
   }
-  function reasons(m, a) {
+  function reasons(m) {
     const out = [];
-    if (a.weather === 'cold' && m.tags.includes('warm')) out.push('🥶 추운 날엔 뜨끈한 게 최고예요.');
-    if (a.weather === 'hot' && m.tags.includes('cool')) out.push('🧊 더위를 싹 식혀줄 메뉴예요.');
-    if (a.weather === 'rain' && m.tags.includes('rain')) out.push('☔ 비 오는 날 딱 생각나는 메뉴예요.');
-    if (a.mood === 'stress' && m.tags.includes('stress')) out.push('😤 스트레스 풀기 딱 좋은 맛이에요.');
-    if (a.mood === 'tired' && m.tags.includes('tired')) out.push('😩 지친 몸을 든든하게 달래줘요.');
-    if (a.mood === 'good' && m.tags.includes('good')) out.push('😊 좋은 기분을 더 좋게 만들어줘요.');
-    const kindText = { soup: '🍲 당기던 국물 메뉴예요.', rice: '🍚 든든한 밥 메뉴예요.', noodle: '🍜 후루룩 면 메뉴예요.', quick: '🥪 가볍고 빠르게 먹을 수 있어요.' };
-    if (m.kind === a.kind) out.push(kindText[m.kind]);
-    const withText = { solo: '🙋 혼밥하기 편한 메뉴예요.', two: '👫 둘이 먹기 딱 좋아요.', group: '👥 여럿이 나눠 먹기 좋아요.', boss: '👔 상사랑 가도 무난한 메뉴예요.' };
-    if (m.tags.includes(a.with)) out.push(withText[a.with]);
-    if (m.price <= a.budget) out.push(m.price === 1 ? '🪙 지갑도 가볍게 지켜줘요.' : '💵 예산 안에서 해결돼요.');
+    Q.forEach(q => {
+      const o = optOf(q);
+      if (!o || !o.why) return;
+      let hit = false;
+      if (q.type === 'kind') hit = m.kind === o.key;
+      else if (q.type === 'level') hit = o.key >= 0 && (m[q.field] || 0) === o.key;
+      else if (q.type === 'budget') hit = m.price <= o.key;
+      else hit = (o.boost || [o.key]).some(t => m.tags.includes(t));
+      if (hit) out.push(o.why);
+    });
     return out.slice(0, 3);
   }
 
@@ -103,12 +132,12 @@
     window.Kakao.Share.sendDefault({
       objectType: 'feed',
       content: {
-        title: `오늘 점심 ${m.em} ${m.name} 어때요?`,
-        description: `${state.name ? state.name + '님이' : '동료가'} 점메추 받은 메뉴예요. ${m.desc}`,
+        title: `${T.sharePrefix} ${m.em} ${m.name} 어때요?`,
+        description: `${state.name ? state.name + '님이' : '친구가'} ${T.short} 받은 메뉴예요. ${m.desc}`,
         imageUrl: cfg.SHARE_IMAGE,
         link: { mobileWebUrl: url, webUrl: url },
       },
-      buttons: [{ title: '나도 점메추 받기', link: { mobileWebUrl: url, webUrl: url } }],
+      buttons: [{ title: `나도 ${T.short} 받기`, link: { mobileWebUrl: url, webUrl: url } }],
     });
   }
   async function copyLink(url, msg) {
@@ -128,24 +157,25 @@
     const sh = state.shared;
     const invite = sh ? `
       <section class="card center invite-card">
-        <span class="ribbon">📨 ${sh.name ? esc(sh.name) + '님의' : '동료의'} 점심 제안</span>
+        <span class="ribbon">📨 ${sh.name ? esc(sh.name) + '님의' : '친구의'} ${T.inviteWord}</span>
         <div class="menu-badge">${sh.menu.em}</div>
         <div class="menu-name">${esc(sh.menu.name)} 어때요?</div>
         <p class="menu-desc">${esc(sh.menu.desc)}</p>
-        <a class="btn map" href="${mapUrl(sh.menu)}" target="_blank" rel="noopener">📍 근처 ${esc(sh.menu.name)} 맛집 찾기</a>
+        <a class="btn map" href="${mapUrl(sh.menu)}" target="_blank" rel="noopener">${placeLabel(sh.menu)}</a>
       </section>` : '';
 
     render(`
       ${invite}
       <section class="hero">
-        <div class="float"><span>🍜</span><span>🍱</span><span>🍔</span><span>🍣</span><span>🥘</span></div>
-        <h1>오늘의 점심메뉴는?</h1>
-        <p>점심 고민은 이제 그만!<br>질문 ${Q.length}개면 오늘 메뉴가 정해져요.</p>
-        <div class="stats"><span>⏱ 30초</span><span>🍽 메뉴 ${MENUS.length}가지</span><span>💬 동료에게 공유</span></div>
+        <div class="float">${T.heroEmojis.map(e => `<span>${e}</span>`).join('')}</div>
+        <h1>${T.title}</h1>
+        <p>${T.tagline}<br>질문 ${Q.length}개면 오늘 메뉴가 정해져요.</p>
+        <div class="stats"><span>⏱ 30초</span><span>${T.icon} 메뉴 ${MENUS.length}가지</span><span>💬 친구에게 공유</span></div>
         <input class="input" id="name" maxlength="10" placeholder="닉네임 (선택, 공유할 때 표시돼요)" value="${esc(state.name)}">
-        <button class="btn" data-act="start">${sh ? '나도 점메추 받기' : '점메추 받기 →'}</button>
+        <button class="btn" data-act="start">${sh ? `나도 ${T.short} 받기` : `${T.short} 받기 →`}</button>
         <button class="btn ghost" data-act="random">🎲 고민 없이 아무거나 골라줘</button>
       </section>
+      ${T.notice ? `<p class="muted center notice">${T.notice}</p>` : ''}
       ${moreHtml()}
     `);
     const readName = () => { state.name = document.getElementById('name').value.trim().slice(0, 10); };
@@ -198,8 +228,8 @@
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { viewResult(); return; }
     render(`
       <section class="card roulette">
-        <p class="muted">오늘의 점심을 고르는 중...</p>
-        <div class="slot spin" id="slot">🍽️</div>
+        <p class="muted">${T.picking}</p>
+        <div class="slot spin" id="slot">${T.icon}</div>
         <div class="slot-name" id="slot-name"></div>
       </section>
     `);
@@ -220,16 +250,16 @@
     const pool = state.ranked.slice(0, 8);
     const m = pool[state.pos % pool.length];
     const alts = [1, 2].map(d => pool[(state.pos + d) % pool.length]);
-    const why = Object.keys(state.answers).length ? reasons(m, state.answers) : ['🎲 고민 없이 운명에 맡겼어요!'];
+    const why = Object.keys(state.answers).length ? reasons(m) : ['🎲 고민 없이 운명에 맡겼어요!'];
 
     render(`
       <section class="result-hero">
-        <span class="ribbon">${state.name ? esc(state.name) + '님의' : '오늘의'} 점심 메뉴</span>
+        <span class="ribbon">${state.name ? esc(state.name) + '님의' : '오늘의'} ${T.resultWord}</span>
         <div class="menu-badge">${m.em}</div>
         <div class="menu-name">${esc(m.name)}</div>
         <p class="menu-desc">${esc(m.desc)}</p>
-        <ul class="reasons">${why.map(r => `<li>${r}</li>`).join('')}</ul>
-        <a class="btn map" href="${mapUrl(m)}" target="_blank" rel="noopener" style="margin-top:16px">📍 근처 ${esc(m.name)} 맛집 찾기</a>
+        ${why.length ? `<ul class="reasons">${why.map(r => `<li>${r}</li>`).join('')}</ul>` : ''}
+        <a class="btn map" href="${mapUrl(m)}" target="_blank" rel="noopener" style="margin-top:16px">${placeLabel(m)}</a>
         <button class="btn secondary" data-act="next">🔄 이건 별로, 다른 메뉴</button>
       </section>
 
@@ -239,8 +269,8 @@
       </section>
 
       <section class="card center share-card">
-        <h3>👋 같이 먹을 동료 부르기</h3>
-        <p class="muted">"오늘 점심 ${esc(m.name)} 어때요?" 하고 보내져요.</p>
+        <h3>👋 ${T.callWord}</h3>
+        <p class="muted">"${T.sharePrefix} ${esc(m.name)} 어때요?" 하고 보내져요.</p>
         <button class="btn kakao" data-act="kakao">💬 카카오톡으로 보내기</button>
         <button class="btn secondary" data-act="copy">🔗 링크 복사</button>
         <button class="btn ghost" data-act="retry">처음부터 다시</button>
@@ -258,9 +288,14 @@
   }
 
   function moreHtml() {
+    const here = location.pathname.split('/').filter(Boolean).pop();
+    const items = FAMILY.filter(f => f.path !== here).map(f => `
+        <a class="more-item" href="../${f.path}/"><span class="em">${f.em}</span><b>${f.title}</b><small>${f.sub}</small></a>`).join('');
     return `
       <section class="card">
-        <a class="more" href="../office-mbti/">
+        <h3>다른 메추도 받아보세요</h3>
+        <div class="more-grid">${items}</div>
+        <a class="more" href="../office-mbti/" style="margin-top:14px">
           <span class="em">💼</span>
           <div><b>MBTI 직장인 유형 테스트</b><br><span class="muted">회사에서 나는 어떤 직장인일까?</span></div>
         </a>

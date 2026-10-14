@@ -238,14 +238,17 @@ h3 { font-size: 16px; margin: 0 0 8px; }
 
 /* ---------- 점메추 ---------- */
 :root {
-  --primary: #ff6a3d;
+  --grad-a: #ffb07a;
+  --grad-b: #ff6a3d;
+  --primary: var(--grad-b);
   --peach: #fff1e8;
-  --line: #f4e2d6;
+  --page-bg: #fff8f2;
+  --line: #f1e4dc;
   --text: #2f2622;
   --muted: #8a7d76;
 }
-body { background: #fff8f2; }
-.btn { background: linear-gradient(135deg, #ff8a4c, #ff5a3c); box-shadow: 0 6px 16px rgba(255, 90, 60, .25); }
+body { background: var(--page-bg); }
+.btn { background: linear-gradient(135deg, var(--grad-a), var(--grad-b)); box-shadow: 0 6px 16px rgba(0, 0, 0, .12); }
 .btn.secondary { background: var(--peach); color: var(--primary); box-shadow: none; }
 .btn.kakao { box-shadow: none; }
 .btn.ghost { box-shadow: none; }
@@ -260,9 +263,9 @@ body { background: #fff8f2; }
 /* 첫 화면 히어로 */
 .hero {
   position: relative; overflow: hidden;
-  background: linear-gradient(150deg, #ffb07a 0%, #ff6a3d 70%);
+  background: linear-gradient(150deg, var(--grad-a) 0%, var(--grad-b) 70%);
   color: #fff; border-radius: 26px; padding: 34px 22px 26px; text-align: center;
-  box-shadow: 0 14px 34px rgba(255, 90, 60, .28); margin-bottom: 16px;
+  box-shadow: 0 14px 34px rgba(0, 0, 0, .14); margin-bottom: 16px;
 }
 .hero::after {
   content: ''; position: absolute; inset: auto -40px -60px auto; width: 180px; height: 180px;
@@ -304,7 +307,7 @@ body { background: #fff8f2; }
 .slot {
   width: 150px; height: 150px; margin: 10px auto 18px; border-radius: 50%;
   background: var(--peach); display: flex; align-items: center; justify-content: center;
-  font-size: 84px; box-shadow: inset 0 0 0 6px #ffe0cc;
+  font-size: 84px; box-shadow: inset 0 0 0 6px rgba(0, 0, 0, .05);
 }
 .slot.spin { animation: wobble .12s linear infinite; }
 @keyframes wobble { 50% { transform: rotate(6deg) scale(1.03); } }
@@ -323,7 +326,7 @@ body { background: #fff8f2; }
 .menu-badge {
   width: 150px; height: 150px; margin: 16px auto 8px; border-radius: 50%;
   background: #fff; display: flex; align-items: center; justify-content: center;
-  font-size: 88px; line-height: 1; box-shadow: 0 10px 26px rgba(255, 106, 61, .25);
+  font-size: 88px; line-height: 1; box-shadow: 0 10px 26px rgba(0, 0, 0, .12);
   animation: pop .5s cubic-bezier(.2, 1.6, .4, 1);
 }
 @keyframes pop { from { transform: scale(.4); opacity: 0; } to { transform: none; opacity: 1; } }
@@ -340,4 +343,12 @@ body { background: #fff8f2; }
 .share-card h3 { font-size: 17px; }
 .more { display: flex; gap: 12px; align-items: center; text-decoration: none; color: inherit; }
 .more .em { font-size: 30px; width: 54px; height: 54px; border-radius: 16px; background: #f2eeff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-.invite-card { border: 2px dashed #ffc7a8; background: #fffdfb; }
+.invite-card { border: 2px dashed var(--grad-a); background: #fffdfb; }
+.notice { margin: -4px 0 14px; }
+.more-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 10px; }
+.more-item {
+  background: #faf7f5; border-radius: 16px; padding: 12px 4px; text-align: center;
+  text-decoration: none; color: var(--text); display: flex; flex-direction: column; gap: 2px;
+}
+.more-item .em { font-size: 30px; }
+.more-item small { color: var(--muted); font-size: 11px; word-break: keep-all; }
