@@ -7,7 +7,7 @@ window.SITE_CONFIG = {
     "short": "술메추",
     "icon": "🍻",
     "title": "오늘 한잔, 뭐 마실까?",
-    "tagline": "술과 안주 조합까지 한 번에!",
+    "tagline": "술과 안주 조합까지 한 번에.",
     "resultWord": "한잔 메뉴",
     "inviteWord": "한잔 제안",
     "sharePrefix": "오늘 한잔",
@@ -27,7 +27,7 @@ window.SITE_CONFIG = {
       "🥃",
       "🍢"
     ],
-    "notice": "🔞 음주는 성인만, 오늘도 적당히 즐겨요!"
+    "notice": "음주는 성인만, 적당히 즐겨요."
   },
 
   // 광고 설정: 'none'(숨김) | 'preview'(자리 표시) | 'adsense'

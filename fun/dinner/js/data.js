@@ -5,40 +5,40 @@
 // ==============================================
 window.QUESTIONS = [
   { id: 'day', em: '🗓️', text: '오늘 하루 어땠어요?', type: 'tag', opts: [
-    { key: 'hard', em: '😵', label: '야근각, 힘들었어요', boost: ['hard'], why: '😵 고생한 오늘, 이 정도는 먹어야죠.' },
-    { key: 'happy', em: '🥳', label: '좋은 일 있었어요', boost: ['party'], why: '🥳 기분 좋은 날엔 역시 이 메뉴예요.' },
-    { key: 'lazy', em: '🛋️', label: '그냥 집에서 쉬고 싶어요', boost: ['delivery'], why: '🛋️ 집에서 배달로 편하게 먹기 좋아요.' },
+    { key: 'hard', em: '😵', label: '야근각, 힘들었어요', boost: ['hard'], why: '고생한 오늘, 이 정도는 먹어야죠.' },
+    { key: 'happy', em: '🥳', label: '좋은 일 있었어요', boost: ['party'], why: '기분 좋은 날엔 역시 이 메뉴예요.' },
+    { key: 'lazy', em: '🛋️', label: '그냥 집에서 쉬고 싶어요', boost: ['delivery'], why: '집에서 배달로 편하게 먹기 좋아요.' },
     { key: 'normal', em: '😐', label: '평범했어요', boost: [] },
   ] },
   { id: 'kind', em: '🍽️', text: '오늘 저녁 당기는 건?', type: 'kind', opts: [
-    { key: 'meat', em: '🥩', label: '고기!', why: '🥩 당기던 고기 메뉴예요.' },
-    { key: 'stew', em: '🍲', label: '국물·찜', why: '🍲 뜨끈한 국물·찜 메뉴예요.' },
-    { key: 'flour', em: '🍕', label: '면·밀가루', why: '🍕 밀가루는 진리죠.' },
-    { key: 'light', em: '🥗', label: '가볍게', soft: true, why: '🥗 부담 없이 가볍게 먹을 수 있어요.' },
+    { key: 'meat', em: '🥩', label: '고기!', why: '당기던 고기 메뉴예요.' },
+    { key: 'stew', em: '🍲', label: '국물·찜', why: '뜨끈한 국물·찜 메뉴예요.' },
+    { key: 'flour', em: '🍕', label: '면·밀가루', why: '밀가루는 진리죠.' },
+    { key: 'light', em: '🥗', label: '가볍게', soft: true, why: '부담 없이 가볍게 먹을 수 있어요.' },
   ] },
   { id: 'spicy', em: '🌶️', text: '매운 건 어때요?', type: 'level', field: 'spicy', opts: [
-    { key: 2, em: '🔥', label: '화끈하게', why: '🔥 원하던 화끈한 매운맛이에요.' },
+    { key: 2, em: '🔥', label: '화끈하게', why: '원하던 화끈한 매운맛이에요.' },
     { key: 1, em: '🌶️', label: '살짝만' },
     { key: 0, em: '🙅', label: '안 매운 거' },
     { key: -1, em: '🤷', label: '상관없어요' },
   ] },
   { id: 'with', em: '🧑‍🤝‍🧑', text: '누구랑 먹어요?', type: 'tag', opts: [
-    { key: 'solo', em: '🙋', label: '혼자', why: '🙋 혼자 먹기에도 부담 없어요.' },
-    { key: 'date', em: '💑', label: '연인·친구랑', why: '💑 둘이 먹기 딱 좋은 메뉴예요.' },
-    { key: 'family', em: '👨‍👩‍👧', label: '가족이랑', why: '👨‍👩‍👧 온 가족이 좋아하는 메뉴예요.' },
-    { key: 'team', em: '🍻', label: '회식', why: '🍻 회식 메뉴로 실패 없어요.' },
+    { key: 'solo', em: '🙋', label: '혼자', why: '혼자 먹기에도 부담 없어요.' },
+    { key: 'date', em: '💑', label: '연인·친구랑', why: '둘이 먹기 딱 좋은 메뉴예요.' },
+    { key: 'family', em: '👨‍👩‍👧', label: '가족이랑', why: '온 가족이 좋아하는 메뉴예요.' },
+    { key: 'team', em: '🍻', label: '회식', why: '회식 메뉴로 실패 없어요.' },
   ] },
   { id: 'budget', em: '💳', text: '1인 예산은?', type: 'budget', opts: [
-    { key: 1, em: '🪙', label: '1.5만 원 이하', why: '🪙 지갑 걱정 없이 먹을 수 있어요.' },
+    { key: 1, em: '🪙', label: '1.5만 원 이하', why: '지갑 걱정 없이 먹을 수 있어요.' },
     { key: 2, em: '💵', label: '2~3만 원' },
     { key: 3, em: '💎', label: '오늘은 플렉스' },
     { key: 2.5, em: '🤔', label: '적당히' },
   ] },
   { id: 'diet', em: '⚖️', text: '오늘 칼로리는...', type: 'tag', opts: [
-    { key: 'cheat', em: '😈', label: '내일의 내가 하겠지', boost: ['heavy'], why: '😈 오늘만큼은 칼로리 생각 금지!' },
-    { key: 'care', em: '🥦', label: '조금은 신경 쓸래요', boost: ['healthy'], avoid: ['heavy'], why: '🥦 맛있는데 부담도 덜해요.' },
+    { key: 'cheat', em: '😈', label: '내일의 내가 하겠지', boost: ['heavy'], why: '오늘만큼은 칼로리 생각 금지!' },
+    { key: 'care', em: '🥦', label: '조금은 신경 쓸래요', boost: ['healthy'], avoid: ['heavy'], why: '맛있는데 부담도 덜해요.' },
     { key: 'any', em: '🤷', label: '상관없어요', boost: [] },
-    { key: 'full', em: '🍚', label: '배만 부르면 돼요', boost: ['filling'], why: '🍚 배부르게 먹을 수 있어요.' },
+    { key: 'full', em: '🍚', label: '배만 부르면 돼요', boost: ['filling'], why: '배부르게 먹을 수 있어요.' },
   ] },
 ];
 

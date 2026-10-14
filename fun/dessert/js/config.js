@@ -7,7 +7,7 @@ window.SITE_CONFIG = {
     "short": "디메추",
     "icon": "🍰",
     "title": "오늘 먹고 싶은 디저트는?",
-    "tagline": "달달한 게 당길 때!",
+    "tagline": "달달한 게 당길 때.",
     "resultWord": "디저트",
     "inviteWord": "디저트 제안",
     "sharePrefix": "오늘 디저트",

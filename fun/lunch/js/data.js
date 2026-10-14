@@ -6,40 +6,40 @@
 // 질문 type과 선택지 필드(boost, avoid, why)는 ../assets/menu.js 맨 위 설명을 보세요.
 window.QUESTIONS = [
   { id: 'mood', em: '🙂', text: '오늘 기분은 어때요?', type: 'tag', opts: [
-    { key: 'good', em: '😊', label: '좋아요', why: '😊 좋은 기분을 더 좋게 만들어줘요.' },
-    { key: 'tired', em: '😩', label: '지쳤어요', why: '😩 지친 몸을 든든하게 달래줘요.' },
-    { key: 'stress', em: '😤', label: '스트레스 만땅', why: '😤 스트레스 풀기 딱 좋은 맛이에요.' },
+    { key: 'good', em: '😊', label: '좋아요', why: '좋은 기분을 더 좋게 만들어줘요.' },
+    { key: 'tired', em: '😩', label: '지쳤어요', why: '지친 몸을 든든하게 달래줘요.' },
+    { key: 'stress', em: '😤', label: '스트레스 만땅', why: '스트레스 풀기 딱 좋은 맛이에요.' },
     { key: 'meh', em: '😐', label: '그냥 그래요' },
   ] },
   { id: 'weather', em: '🌦️', text: '오늘 날씨는요?', type: 'tag', opts: [
-    { key: 'cold', em: '🥶', label: '추워요', boost: ['warm'], avoid: ['cool'], why: '🥶 추운 날엔 뜨끈한 게 최고예요.' },
-    { key: 'hot', em: '🥵', label: '더워요', boost: ['cool'], w: 6, avoid: ['warm'], why: '🧊 더위를 싹 식혀줄 메뉴예요.' },
-    { key: 'rain', em: '☔', label: '비 와요', boost: ['rain'], w: 5, avoid: ['cool'], why: '☔ 비 오는 날 딱 생각나는 메뉴예요.' },
+    { key: 'cold', em: '🥶', label: '추워요', boost: ['warm'], avoid: ['cool'], why: '추운 날엔 뜨끈한 게 최고예요.' },
+    { key: 'hot', em: '🥵', label: '더워요', boost: ['cool'], w: 6, avoid: ['warm'], why: '더위를 싹 식혀줄 메뉴예요.' },
+    { key: 'rain', em: '☔', label: '비 와요', boost: ['rain'], w: 5, avoid: ['cool'], why: '비 오는 날 딱 생각나는 메뉴예요.' },
     { key: 'ok', em: '🌤️', label: '딱 좋아요', boost: [] },
   ] },
   { id: 'kind', em: '🍽️', text: '오늘 당기는 건?', type: 'kind', opts: [
-    { key: 'soup', em: '🍲', label: '뜨끈한 국물', why: '🍲 당기던 국물 메뉴예요.' },
-    { key: 'rice', em: '🍚', label: '든든한 밥', why: '🍚 든든한 밥 메뉴예요.' },
-    { key: 'noodle', em: '🍜', label: '후루룩 면', why: '🍜 후루룩 면 메뉴예요.' },
-    { key: 'quick', em: '🥪', label: '가볍고 빠르게', soft: true, why: '🥪 가볍고 빠르게 먹을 수 있어요.' },
+    { key: 'soup', em: '🍲', label: '뜨끈한 국물', why: '당기던 국물 메뉴예요.' },
+    { key: 'rice', em: '🍚', label: '든든한 밥', why: '든든한 밥 메뉴예요.' },
+    { key: 'noodle', em: '🍜', label: '후루룩 면', why: '후루룩 면 메뉴예요.' },
+    { key: 'quick', em: '🥪', label: '가볍고 빠르게', soft: true, why: '가볍고 빠르게 먹을 수 있어요.' },
   ] },
   { id: 'spicy', em: '🌶️', text: '매운 건 어때요?', type: 'level', field: 'spicy', opts: [
-    { key: 2, em: '🔥', label: '화끈하게', why: '🔥 원하던 화끈한 매운맛이에요.' },
+    { key: 2, em: '🔥', label: '화끈하게', why: '원하던 화끈한 매운맛이에요.' },
     { key: 1, em: '🌶️', label: '살짝만' },
     { key: 0, em: '🙅', label: '안 매운 거' },
     { key: -1, em: '🤷', label: '상관없어요' },
   ] },
   { id: 'budget', em: '💳', text: '오늘 점심 예산은?', type: 'budget', opts: [
-    { key: 1, em: '🪙', label: '만 원 이하', why: '🪙 지갑도 가볍게 지켜줘요.' },
+    { key: 1, em: '🪙', label: '만 원 이하', why: '지갑도 가볍게 지켜줘요.' },
     { key: 2, em: '💵', label: '1~1.5만 원' },
     { key: 3, em: '💎', label: '오늘은 플렉스' },
     { key: 2.5, em: '🤔', label: '적당히' },
   ] },
   { id: 'with', em: '🧑‍🤝‍🧑', text: '누구랑 먹어요?', type: 'tag', opts: [
-    { key: 'solo', em: '🙋', label: '혼밥', why: '🙋 혼밥하기 편한 메뉴예요.' },
-    { key: 'two', em: '👫', label: '한두 명이랑', why: '👫 둘이 먹기 딱 좋아요.' },
-    { key: 'group', em: '👥', label: '팀 다 같이', why: '👥 여럿이 나눠 먹기 좋아요.' },
-    { key: 'boss', em: '👔', label: '상사랑', why: '👔 상사랑 가도 무난한 메뉴예요.' },
+    { key: 'solo', em: '🙋', label: '혼밥', why: '혼밥하기 편한 메뉴예요.' },
+    { key: 'two', em: '👫', label: '한두 명이랑', why: '둘이 먹기 딱 좋아요.' },
+    { key: 'group', em: '👥', label: '팀 다 같이', why: '여럿이 나눠 먹기 좋아요.' },
+    { key: 'boss', em: '👔', label: '상사랑', why: '상사랑 가도 무난한 메뉴예요.' },
   ] },
 ];
 

@@ -4,7 +4,7 @@
 //
 //  질문 type
 //   - kind   : 메뉴의 kind와 같으면 크게 가산 (opt.soft가 true면 다른 종류도 덜 감점)
-//   - level  : 메뉴의 q.field 값(0~2)과 가까울수록 가산. key가 -1이면 무시
+//   - level  : 메뉴의 q.field 값(0~2)과 가까울수록 가산(q.w배). key가 -1이면 무시
 //   - budget : 메뉴 price가 예산을 넘으면 감점
 //   - tag    : opt.boost 태그(기본: [key])가 있으면 가산, opt.avoid 태그가 있으면 감점
 //  opt.why  : 그 선택이 메뉴와 맞았을 때 결과 화면에 보여줄 이유
@@ -22,6 +22,7 @@
     { path: 'dinner', em: '🍖', title: '저메추', sub: '오늘의 저녁메뉴는?' },
     { path: 'dessert', em: '🍰', title: '디메추', sub: '오늘 먹고 싶은 디저트는?' },
     { path: 'drink', em: '🍻', title: '술메추', sub: '오늘 한잔, 뭐 마실까?' },
+    { path: 'night', em: '🌙', title: '야메추', sub: '오늘 밤 야식은?' },
   ];
 
   const state = {
@@ -34,12 +35,7 @@
   };
 
   // 테마 색
-  const root = document.documentElement.style;
-  root.setProperty('--grad-a', T.colors.a);
-  root.setProperty('--grad-b', T.colors.b);
-  root.setProperty('--primary', T.colors.b);
-  root.setProperty('--peach', T.colors.soft);
-  root.setProperty('--page-bg', T.colors.bg);
+  document.documentElement.style.setProperty('--primary', T.colors.b);
 
   // ---------- 유틸 ----------
   function esc(s) {
@@ -53,13 +49,13 @@
     toast._t = setTimeout(() => t.classList.remove('show'), 1800);
   }
   function render(html) {
-    const top = `<div class="topbar"><a href="../">← monojilab <b>fun</b></a><span class="muted">${T.icon} ${T.short}</span></div>`;
+    const top = `<div class="topbar"><a href="../">← monojilab fun</a><span>${T.short}</span></div>`;
     app.innerHTML = `<div class="fade-in">${top}${html}</div>`;
     window.scrollTo({ top: 0 });
   }
   function byId(id) { return MENUS.find(m => m.id === id); }
   function mapUrl(m) { return `https://map.kakao.com/link/search/${encodeURIComponent(m.q || m.name.split(/[·+]/)[0])}`; }
-  function placeLabel(m) { return `📍 근처 ${esc([m.q || m.name, T.placeWord].filter(Boolean).join(' '))} 찾기`; }
+  function placeLabel(m) { return `근처 ${esc([m.q || m.name, T.placeWord].filter(Boolean).join(' '))} 찾기`; }
   function optOf(q) { return q.opts.find(o => o.key === state.answers[q.id]); }
 
   // ---------- 추천 ----------
@@ -72,7 +68,7 @@
         if (o.key === 'any') return;
         s += m.kind === o.key ? 8 : (o.soft ? -2 : -4);
       } else if (q.type === 'level') {
-        if (o.key >= 0) s += 4 - 3 * Math.abs((m[q.field] || 0) - o.key);
+        if (o.key >= 0) s += (q.w || 1) * (4 - 3 * Math.abs((m[q.field] || 0) - o.key));
       } else if (q.type === 'budget') {
         if (m.price > o.key) s -= 6 * (m.price - o.key);
         if (o.key === 3 && m.price === 3) s += 3;
@@ -156,26 +152,25 @@
   function viewHome() {
     const sh = state.shared;
     const invite = sh ? `
-      <section class="card center invite-card">
-        <span class="ribbon">📨 ${sh.name ? esc(sh.name) + '님의' : '친구의'} ${T.inviteWord}</span>
-        <div class="menu-badge">${sh.menu.em}</div>
+      <section class="result">
+        <p class="label">${sh.name ? esc(sh.name) + '님의' : '친구의'} ${T.inviteWord}</p>
+        <div class="menu-em">${sh.menu.em}</div>
         <div class="menu-name">${esc(sh.menu.name)} 어때요?</div>
         <p class="menu-desc">${esc(sh.menu.desc)}</p>
-        <a class="btn map" href="${mapUrl(sh.menu)}" target="_blank" rel="noopener">${placeLabel(sh.menu)}</a>
+        <a class="btn dark" style="margin-top:20px" href="${mapUrl(sh.menu)}" target="_blank" rel="noopener">${placeLabel(sh.menu)}</a>
       </section>` : '';
 
     render(`
       ${invite}
-      <section class="hero">
-        <div class="float">${T.heroEmojis.map(e => `<span>${e}</span>`).join('')}</div>
+      <section>
+        <p class="label">${T.short}</p>
         <h1>${T.title}</h1>
-        <p>${T.tagline}<br>질문 ${Q.length}개면 오늘 메뉴가 정해져요.</p>
-        <div class="stats"><span>⏱ 30초</span><span>${T.icon} 메뉴 ${MENUS.length}가지</span><span>💬 친구에게 공유</span></div>
-        <input class="input" id="name" maxlength="10" placeholder="닉네임 (선택, 공유할 때 표시돼요)" value="${esc(state.name)}">
-        <button class="btn" data-act="start">${sh ? `나도 ${T.short} 받기` : `${T.short} 받기 →`}</button>
-        <button class="btn ghost" data-act="random">🎲 고민 없이 아무거나 골라줘</button>
+        <p class="muted">${T.tagline} 질문 ${Q.length}개에 답하면 ${MENUS.length}가지 중에서 골라드려요.</p>
+        <input class="input" id="name" maxlength="10" placeholder="닉네임 (선택)" value="${esc(state.name)}">
+        <button class="btn" data-act="start">${sh ? '나도 추천받기' : '시작하기'}</button>
+        <button class="btn ghost" data-act="random">그냥 아무거나 골라줘</button>
+        ${T.notice ? `<p class="muted notice center">${T.notice}</p>` : ''}
       </section>
-      ${T.notice ? `<p class="muted center notice">${T.notice}</p>` : ''}
       ${moreHtml()}
     `);
     const readName = () => { state.name = document.getElementById('name').value.trim().slice(0, 10); };
@@ -195,17 +190,14 @@
     const q = Q[i];
     const cur = state.answers[q.id];
     render(`
-      <section class="card">
-        <div class="progress"><div style="width:${(i / Q.length) * 100}%"></div></div>
-        <div class="q-meta"><span>Q${i + 1}</span><span>${i + 1} / ${Q.length}</span></div>
-        <div class="q-emoji">${q.em}</div>
+      <div class="progress"><div style="width:${((i + 1) / Q.length) * 100}%"></div></div>
+      <section style="border:0">
+        <p class="q-meta">${i + 1} / ${Q.length}</p>
         <p class="q-text">${esc(q.text)}</p>
         <div class="choices">
           ${q.opts.map((o, k) => `<button class="choice${cur === o.key ? ' on' : ''}" data-k="${k}"><span class="em">${o.em}</span>${esc(o.label)}</button>`).join('')}
         </div>
-        <div class="row" style="margin-top:18px">
-          <button class="btn ghost" data-act="back">${i === 0 ? '처음으로' : '← 이전 질문'}</button>
-        </div>
+        <button class="btn ghost" data-act="back" style="margin-top:16px">${i === 0 ? '처음으로' : '이전 질문'}</button>
       </section>
     `);
     app.querySelectorAll('.choice').forEach(b => {
@@ -215,7 +207,7 @@
         setTimeout(() => {
           if (i < Q.length - 1) { state.idx++; viewQuiz(); }
           else { state.ranked = rank(); state.pos = 0; viewRoulette(); }
-        }, 160);
+        }, 140);
       };
     });
     app.querySelector('[data-act="back"]').onclick = () => {
@@ -223,14 +215,14 @@
     };
   }
 
-  // ---------- 화면: 룰렛 (결과 직전 두근두근) ----------
+  // ---------- 화면: 고르는 중 ----------
   function viewRoulette() {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { viewResult(); return; }
     render(`
-      <section class="card roulette">
-        <p class="muted">${T.picking}</p>
-        <div class="slot spin" id="slot">${T.icon}</div>
+      <section class="roulette">
+        <div class="slot" id="slot"></div>
         <div class="slot-name" id="slot-name"></div>
+        <p class="muted" style="margin-top:8px">${T.picking}</p>
       </section>
     `);
     const slot = document.getElementById('slot');
@@ -240,7 +232,7 @@
       const m = MENUS[Math.floor(Math.random() * MENUS.length)];
       slot.textContent = m.em; nm.textContent = m.name;
       n++; delay *= 1.12;
-      if (n < 16) setTimeout(tick, delay); else viewResult();
+      if (n < 14) setTimeout(tick, delay); else viewResult();
     };
     tick();
   }
@@ -250,29 +242,29 @@
     const pool = state.ranked.slice(0, 8);
     const m = pool[state.pos % pool.length];
     const alts = [1, 2].map(d => pool[(state.pos + d) % pool.length]);
-    const why = Object.keys(state.answers).length ? reasons(m) : ['🎲 고민 없이 운명에 맡겼어요!'];
+    const why = Object.keys(state.answers).length ? reasons(m) : ['고민 없이 운에 맡겼어요.'];
 
     render(`
-      <section class="result-hero">
-        <span class="ribbon">${state.name ? esc(state.name) + '님의' : '오늘의'} ${T.resultWord}</span>
-        <div class="menu-badge">${m.em}</div>
+      <section class="result">
+        <p class="label">${state.name ? esc(state.name) + '님의' : '오늘의'} ${T.resultWord}</p>
+        <div class="menu-em">${m.em}</div>
         <div class="menu-name">${esc(m.name)}</div>
         <p class="menu-desc">${esc(m.desc)}</p>
         ${why.length ? `<ul class="reasons">${why.map(r => `<li>${r}</li>`).join('')}</ul>` : ''}
-        <a class="btn map" href="${mapUrl(m)}" target="_blank" rel="noopener" style="margin-top:16px">${placeLabel(m)}</a>
-        <button class="btn secondary" data-act="next">🔄 이건 별로, 다른 메뉴</button>
+        <a class="btn dark" href="${mapUrl(m)}" target="_blank" rel="noopener" style="margin-top:16px">${placeLabel(m)}</a>
+        <button class="btn secondary" data-act="next">다른 메뉴 보기</button>
       </section>
 
-      <section class="card center">
+      <section>
         <h3>이것도 괜찮아요</h3>
         <div class="alts">${alts.map((x, k) => `<button class="alt" data-alt="${k + 1}"><span class="em">${x.em}</span>${esc(x.name)}</button>`).join('')}</div>
       </section>
 
-      <section class="card center share-card">
-        <h3>👋 ${T.callWord}</h3>
-        <p class="muted">"${T.sharePrefix} ${esc(m.name)} 어때요?" 하고 보내져요.</p>
-        <button class="btn kakao" data-act="kakao">💬 카카오톡으로 보내기</button>
-        <button class="btn secondary" data-act="copy">🔗 링크 복사</button>
+      <section>
+        <h3>${T.callWord}</h3>
+        <p class="muted" style="margin:-8px 0 12px">"${T.sharePrefix} ${esc(m.name)} 어때요?" 하고 보내져요.</p>
+        <button class="btn kakao" data-act="kakao">카카오톡으로 보내기</button>
+        <button class="btn secondary" data-act="copy">링크 복사</button>
         <button class="btn ghost" data-act="retry">처음부터 다시</button>
       </section>
       ${moreHtml()}
@@ -292,15 +284,13 @@
     const items = FAMILY.filter(f => f.path !== here).map(f => `
         <a class="more-item" href="../${f.path}/"><span class="em">${f.em}</span><b>${f.title}</b><small>${f.sub}</small></a>`).join('');
     return `
-      <section class="card">
-        <h3>다른 메추도 받아보세요</h3>
-        <div class="more-grid">${items}</div>
-        <a class="more" href="../office-mbti/" style="margin-top:14px">
-          <span class="em">💼</span>
-          <div><b>MBTI 직장인 유형 테스트</b><br><span class="muted">회사에서 나는 어떤 직장인일까?</span></div>
-        </a>
+      <section>
+        <h3>다른 메추</h3>
+        <div class="more-list">${items}
+          <a class="more-item" href="../office-mbti/"><span class="em">💼</span><b>직장인 MBTI</b><small>회사에서 나는?</small></a>
+        </div>
       </section>
-      <p class="muted center"><a href="../" style="color:inherit">monojilab fun</a> · 다른 재밌는 콘텐츠 보기</p>`;
+      <p class="foot"><a href="../">monojilab fun</a></p>`;
   }
 
   // ---------- 광고 ----------

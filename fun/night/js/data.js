@@ -1,0 +1,79 @@
+// ==============================================
+//  야메추 데이터: 질문과 메뉴
+//  메뉴를 추가하려면 MENUS에 한 줄만 더 넣으면 됩니다.
+//  질문 type과 선택지 필드(boost, avoid, why)는 ../assets/menu.js 맨 위 설명을 보세요.
+// ==============================================
+window.QUESTIONS = [
+  { id: 'hunger', em: '😋', text: '지금 얼마나 배고파요?', type: 'level', field: 'size', opts: [
+    { key: 0, em: '🤏', label: '입이 심심한 정도', why: '입가심으로 딱 적당한 양이에요.' },
+    { key: 1, em: '🙂', label: '살짝 출출해요' },
+    { key: 2, em: '😫', label: '배고파서 잠이 안 와요', why: '배고픔을 확실하게 잡아줘요.' },
+    { key: -1, em: '🤷', label: '모르겠어요' },
+  ] },
+  { id: 'kind', em: '🌙', text: '당기는 야식은?', type: 'kind', opts: [
+    { key: 'fried', em: '🍗', label: '바삭한 튀김', why: '야식은 역시 튀김이죠.' },
+    { key: 'spicy', em: '🌶️', label: '맵고 자극적인 거', why: '자극적인 맛이 당길 때 딱이에요.' },
+    { key: 'soup', em: '🍜', label: '뜨끈한 국물', why: '뜨끈한 국물로 속을 채워줘요.' },
+    { key: 'light', em: '🥪', label: '가벼운 간식', soft: true, why: '부담 없이 가볍게 먹을 수 있어요.' },
+  ] },
+  { id: 'how', em: '🛵', text: '어떻게 먹을 거예요?', type: 'tag', opts: [
+    { key: 'delivery', em: '🛵', label: '배달 시켜요', why: '배달로 시키기 좋은 메뉴예요.' },
+    { key: 'cook', em: '🍳', label: '집에서 간단히 해 먹어요', why: '집에서 금방 만들어 먹을 수 있어요.' },
+    { key: 'store', em: '🏪', label: '편의점 다녀올게요', why: '편의점에서 바로 살 수 있어요.' },
+    { key: 'out', em: '🚶', label: '나가서 먹어요', why: '늦게까지 하는 가게가 많아요.' },
+  ] },
+  { id: 'with', em: '🧑‍🤝‍🧑', text: '누구랑 먹어요?', type: 'tag', opts: [
+    { key: 'solo', em: '🙋', label: '혼자', why: '혼자 먹기에 양이 딱 맞아요.' },
+    { key: 'two', em: '💑', label: '둘이서', why: '둘이 나눠 먹기 좋아요.' },
+    { key: 'group', em: '👥', label: '여럿이', why: '여럿이 나눠 먹기 좋아요.' },
+    { key: 'any', em: '🤷', label: '상관없어요', boost: [] },
+  ] },
+  { id: 'guilt', em: '⚖️', text: '내일 아침 얼굴이 걱정되나요?', type: 'tag', opts: [
+    { key: 'yolo', em: '😈', label: '몰라, 먹고 볼래요', boost: ['heavy'], why: '오늘 밤은 칼로리 생각 금지!' },
+    { key: 'care', em: '🥲', label: '조금 걱정돼요', boost: ['light'], avoid: ['heavy'], why: '야식치고 부담이 덜해요.' },
+    { key: 'any', em: '🤷', label: '상관없어요', boost: [] },
+    { key: 'drink', em: '🍺', label: '맥주랑 같이 먹을래요', boost: ['beer'], w: 4, why: '맥주 안주로 찰떡이에요.' },
+  ] },
+  { id: 'budget', em: '💳', text: '예산은요?', type: 'budget', opts: [
+    { key: 1, em: '🪙', label: '만 원 이하', why: '지갑 걱정 없는 가격이에요.' },
+    { key: 2, em: '💵', label: '2만 원 안쪽' },
+    { key: 3, em: '💎', label: '오늘은 플렉스' },
+    { key: 2.5, em: '🤔', label: '적당히' },
+  ] },
+];
+
+// kind: fried | spicy | soup | light
+// size: 0(간단) ~ 2(든든), price: 1(만 원 이하) ~ 3(비싼 편)
+// tags: delivery cook store out(어떻게) solo two group(누구랑) heavy light beer
+window.MENUS = [
+  { id: 'chicken', name: '후라이드 치킨', em: '🍗', kind: 'fried', size: 2, price: 2, tags: ['delivery', 'two', 'group', 'heavy', 'beer'], desc: '야식의 왕. 반반 무 많이, 맥주는 거들 뿐.' },
+  { id: 'yangnyeom', name: '양념치킨', em: '🍗', kind: 'spicy', size: 2, price: 2, tags: ['delivery', 'two', 'group', 'heavy', 'beer'], desc: '달콤매콤 양념에 손가락까지 쪽쪽.' },
+  { id: 'pizza', name: '피자', em: '🍕', kind: 'fried', size: 2, price: 2, tags: ['delivery', 'group', 'heavy', 'beer'], desc: '치즈 듬뿍 피자 한 판. 남으면 내일 아침밥.' },
+  { id: 'jokbal', name: '족발', em: '🐷', kind: 'soup', size: 2, price: 3, tags: ['delivery', 'group', 'two', 'beer'], desc: '쫀득한 족발에 막국수 추가. 야식계의 스테디셀러.' },
+  { id: 'tteokbokki', name: '떡볶이', em: '🍢', kind: 'spicy', size: 1, price: 1, tags: ['delivery', 'solo', 'two', 'heavy'], desc: '밤에 먹는 매운 떡볶이는 왜 더 맛있을까요.' },
+  { id: 'dakbal', name: '불닭발', em: '🌶️', kind: 'spicy', size: 1, price: 2, tags: ['delivery', 'two', 'beer'], desc: '맵다 맵다 하면서 계속 손이 가요. 주먹밥은 필수.' },
+  { id: 'gopchang', name: '곱창볶음', em: '🔥', kind: 'spicy', size: 2, price: 3, tags: ['delivery', 'out', 'two', 'heavy', 'beer'], desc: '고소한 곱창에 볶음밥까지. 오늘 밤은 든든하게.' },
+  { id: 'jjamppong', name: '짬뽕', em: '🍜', kind: 'soup', size: 2, price: 1, tags: ['delivery', 'solo'], desc: '얼큰한 짬뽕 국물로 밤 허기를 한 방에.' },
+  { id: 'ramyeon', name: '라면', em: '🍜', kind: 'soup', size: 1, price: 1, tags: ['cook', 'solo', 'heavy'], desc: '밤 11시의 라면은 진리. 계란 하나 톡.' },
+  { id: 'jjapaghetti', name: '짜파구리', em: '🖤', kind: 'soup', size: 1, price: 1, tags: ['cook', 'solo', 'two'], desc: '짜장과 매운맛의 완벽한 조화. 차돌 있으면 금상첨화.' },
+  { id: 'cupnoodle-kimbap', name: '컵라면+삼각김밥', em: '🏪', kind: 'soup', size: 1, price: 1, tags: ['store', 'solo'], desc: '편의점 국룰 조합. 3분이면 행복이 와요.' },
+  { id: 'udon', name: '우동', em: '🍥', kind: 'soup', size: 1, price: 1, tags: ['out', 'solo', 'light'], desc: '포장마차 감성 우동 한 그릇. 속이 편해요.' },
+  { id: 'gukbap', name: '순대국밥', em: '🍲', kind: 'soup', size: 2, price: 1, tags: ['out', 'solo'], desc: '24시간 국밥집은 언제나 열려 있어요.' },
+  { id: 'haejang', name: '해장국', em: '🥣', kind: 'soup', size: 2, price: 1, tags: ['out', 'solo', 'two'], desc: '한잔하고 들어가는 길이라면 해장국이 정답.' },
+  { id: 'bossam', name: '보쌈', em: '🥬', kind: 'soup', size: 2, price: 3, tags: ['delivery', 'group', 'light'], desc: '기름기 쏙 뺀 수육. 야식치고 양심적인 선택.' },
+  { id: 'dakgangjeong', name: '닭강정', em: '🍯', kind: 'fried', size: 1, price: 1, tags: ['store', 'out', 'solo', 'beer'], desc: '식어도 맛있는 달콤 바삭 닭강정.' },
+  { id: 'twigim', name: '모둠 튀김', em: '🍤', kind: 'fried', size: 1, price: 1, tags: ['delivery', 'two', 'beer'], desc: '오징어, 김말이, 고구마. 떡볶이 국물에 찍어 먹기.' },
+  { id: 'fries', name: '감자튀김+너겟', em: '🍟', kind: 'fried', size: 0, price: 1, tags: ['delivery', 'solo', 'beer'], desc: '맥주 한 캔이랑 딱 좋은 양.' },
+  { id: 'burger', name: '햄버거 세트', em: '🍔', kind: 'fried', size: 2, price: 1, tags: ['delivery', 'out', 'solo', 'heavy'], desc: '24시 버거집으로. 감자튀김은 라지 사이즈.' },
+  { id: 'mara', name: '마라탕', em: '🥵', kind: 'spicy', size: 2, price: 2, tags: ['delivery', 'solo', 'two'], desc: '얼얼하게 땀 빼는 마라탕. 꿔바로우까지 추가.' },
+  { id: 'buldak', name: '불닭볶음면', em: '🔥', kind: 'spicy', size: 1, price: 1, tags: ['store', 'cook', 'solo'], desc: '편의점에서 바로. 치즈 한 장 올리면 덜 매워요.' },
+  { id: 'ojingeo', name: '마른오징어+맥주', em: '🦑', kind: 'light', size: 0, price: 1, tags: ['store', 'solo', 'two', 'beer', 'light'], desc: '마요네즈에 콕. 영화 한 편 보면서 질겅질겅.' },
+  { id: 'nuts', name: '견과류+치즈', em: '🧀', kind: 'light', size: 0, price: 1, tags: ['store', 'solo', 'light', 'beer'], desc: '죄책감 덜한 야식. 와인 한 잔 곁들여도 좋아요.' },
+  { id: 'fruit', name: '과일', em: '🍎', kind: 'light', size: 0, price: 1, tags: ['cook', 'solo', 'two', 'light'], desc: '깎아 먹는 과일 한 접시. 상큼하게 마무리.' },
+  { id: 'toast', name: '계란 토스트', em: '🍞', kind: 'light', size: 1, price: 1, tags: ['cook', 'solo'], desc: '버터에 구운 식빵, 계란, 설탕 솔솔. 길거리 토스트 맛.' },
+  { id: 'gyeranbap', name: '간장계란밥', em: '🍳', kind: 'light', size: 1, price: 1, tags: ['cook', 'solo', 'light'], desc: '반숙 계란에 간장, 참기름. 5분이면 완성.' },
+  { id: 'corn-dog', name: '핫도그', em: '🌭', kind: 'fried', size: 1, price: 1, tags: ['store', 'out', 'solo'], desc: '설탕 묻히고 케첩 듬뿍. 바삭 쫄깃한 핫도그.' },
+  { id: 'icecream', name: '아이스크림', em: '🍨', kind: 'light', size: 0, price: 1, tags: ['store', 'solo', 'two'], desc: '자기 전 달달하게. 한 통 다 먹으면 반칙.' },
+  { id: 'yakgwa-milk', name: '빵+우유', em: '🥛', kind: 'light', size: 0, price: 1, tags: ['store', 'solo', 'light'], desc: '편의점 빵에 흰 우유. 가볍게 허기만 달래요.' },
+  { id: 'jjimdak', name: '찜닭', em: '🍗', kind: 'soup', size: 2, price: 2, tags: ['delivery', 'two', 'group'], desc: '당면 듬뿍 찜닭에 밥까지 비벼 먹으면 끝.' },
+];

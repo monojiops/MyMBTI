@@ -7,7 +7,7 @@ window.SITE_CONFIG = {
     "short": "저메추",
     "icon": "🍖",
     "title": "오늘의 저녁메뉴는?",
-    "tagline": "저녁 뭐 먹지 고민 끝!",
+    "tagline": "저녁 뭐 먹을지 모를 때.",
     "resultWord": "저녁 메뉴",
     "inviteWord": "저녁 제안",
     "sharePrefix": "오늘 저녁",

@@ -4,7 +4,7 @@ window.SITE_CONFIG = {
   KAKAO_JS_KEY: '08c9afec931484a9136fc232675f181e',
   SHARE_IMAGE: 'https://monojilab.com/fun/lunch/og.png',
   THEME: {
-    short: '점메추', icon: '🍱', title: '오늘의 점심메뉴는?', tagline: '점심 고민은 이제 그만!',
+    short: '점메추', icon: '🍱', title: '오늘의 점심메뉴는?', tagline: '점심 고민될 때.',
     heroEmojis: ['🍜', '🍱', '🍔', '🍣', '🥘'],
     resultWord: '점심 메뉴', inviteWord: '점심 제안', sharePrefix: '오늘 점심',
     callWord: '같이 먹을 동료 부르기', placeWord: '맛집', picking: '오늘의 점심을 고르는 중...',

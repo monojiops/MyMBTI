@@ -3,89 +3,54 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>monojilab fun · 재밌는 테스트 모음</title>
-  <meta name="description" content="monojilab의 심리 테스트 모음. 친구, 동료와 공유하고 궁합을 확인해보세요.">
-  <meta property="og:title" content="monojilab · 재밌는 테스트 모음">
-  <meta property="og:description" content="시즌마다 새로운 테스트가 올라와요.">
-  <meta property="og:image" content="https://monojilab.com/fun/office-mbti/og.png">
+  <title>monojilab fun</title>
+  <meta name="description" content="점메추, 저메추, 디메추, 술메추, 야메추와 직장인 MBTI. 친구, 동료와 같이 해보세요.">
+  <meta property="og:title" content="monojilab fun">
+  <meta property="og:description" content="오늘 뭐 먹지? 메뉴 추천과 재밌는 테스트 모음">
+  <meta property="og:image" content="https://monojilab.com/fun/lunch/og.png">
   <meta property="og:url" content="https://monojilab.com/fun/">
   <style>
-    :root { --bg: #f6f3ff; --card: #fff; --text: #2b2540; --muted: #7a7392; --primary: #7c5cff; --line: #e7e2f5; }
     * { box-sizing: border-box; }
     body {
-      margin: 0; background: var(--bg); color: var(--text);
+      margin: 0; background: #fff; color: #191919; line-height: 1.55;
       font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif;
-      line-height: 1.55;
-      padding: 40px max(16px, env(safe-area-inset-right, 0px)) 40px max(16px, env(safe-area-inset-left, 0px));
+      -webkit-font-smoothing: antialiased;
+      padding: 0 max(20px, env(safe-area-inset-right, 0px)) 40px max(20px, env(safe-area-inset-left, 0px));
     }
-    .wrap { max-width: 480px; margin: 0 auto; }
-    .brand { font-weight: 900; font-size: 28px; letter-spacing: -0.5px; margin: 0; }
-    .brand span { color: var(--primary); }
-    .sub { color: var(--muted); margin: 4px 0 28px; }
-    .label { font-size: 13px; font-weight: 700; color: var(--muted); letter-spacing: 1px; margin: 0 0 10px; }
-    .test {
-      display: flex; gap: 16px; align-items: center;
-      background: var(--card); border-radius: 20px; padding: 20px;
-      text-decoration: none; color: inherit;
-      box-shadow: 0 6px 24px rgba(80, 60, 160, .08);
-      transition: transform .1s ease;
-    }
-    .test:hover { transform: translateY(-2px); }
-    .test:focus-visible { outline: 3px solid var(--primary); outline-offset: 2px; }
-    .test .em { font-size: 44px; width: 64px; height: 64px; border-radius: 16px; background: #f2eeff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    .test h2 { font-size: 18px; margin: 0 0 2px; }
-    .test p { margin: 0; color: var(--muted); font-size: 14px; }
-    .new { display: inline-block; font-size: 11px; font-weight: 800; color: #fff; background: #ff6b6b; border-radius: 99px; padding: 1px 8px; margin-left: 6px; vertical-align: 2px; }
-    .soon { margin-top: 12px; border: 2px dashed var(--line); border-radius: 20px; padding: 18px; text-align: center; color: var(--muted); font-size: 14px; }
-    footer { margin-top: 40px; color: #b0a9c8; font-size: 12px; text-align: center; }
+    .wrap { max-width: 440px; margin: 0 auto; }
+    .top { height: 44px; display: flex; align-items: center; font-size: 13px; color: #8b8b8b; }
+    .top a { color: inherit; text-decoration: none; }
+    h1 { font-size: 28px; letter-spacing: -0.6px; margin: 20px 0 4px; }
+    .sub { color: #8b8b8b; font-size: 14px; margin: 0 0 28px; }
+    h2 { font-size: 13px; color: #8b8b8b; font-weight: 600; margin: 28px 0 4px; }
+    a.item { display: flex; align-items: center; gap: 14px; padding: 14px 0; border-bottom: 1px solid #ececec; text-decoration: none; color: inherit; }
+    a.item .em { font-size: 26px; width: 32px; text-align: center; }
+    a.item b { display: block; font-size: 16px; }
+    a.item small { color: #8b8b8b; font-size: 13px; }
+    a.item .go { margin-left: auto; color: #c4c4c4; }
+    footer { margin-top: 40px; color: #b0b0b0; font-size: 12px; text-align: center; }
+    footer a { color: inherit; }
   </style>
   <meta name="google-adsense-account" content="ca-pub-9664453480957778">
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9664453480957778" crossorigin="anonymous"></script>
 </head>
 <body>
   <div class="wrap">
-    <h1 class="brand">monoji<span>lab</span></h1>
-    <p class="sub">시즌마다 새로운 테스트가 올라와요.</p>
+    <div class="top"><a href="../">← MONOJI</a></div>
+    <h1>monojilab fun</h1>
+    <p class="sub">고민될 때 가볍게 해보세요.</p>
 
-    <p class="label">지금 인기 테스트</p>
-    <a class="test" href="office-mbti/">
-      <div class="em">💼</div>
-      <div>
-        <h2>MBTI 직장인 유형 테스트</h2>
-        <p>회사에서 나는 어떤 직장인일까? 40가지 유형과 동료 케미까지</p>
-      </div>
-    </a>
-    <a class="test" href="lunch/" style="margin-top:12px">
-      <div class="em" style="background:#fff1e8">🍱</div>
-      <div>
-        <h2>점메추 · 오늘의 점심메뉴는?<span class="new">NEW</span></h2>
-        <p>질문 6개로 골라주는 점심, 동료에게 보내서 같이 가요</p>
-      </div>
-    </a>
-    <a class="test" href="dinner/" style="margin-top:12px">
-      <div class="em" style="background:#efeaff">🍖</div>
-      <div>
-        <h2>저메추 · 오늘의 저녁메뉴는?<span class="new">NEW</span></h2>
-        <p>고기? 국물? 오늘 저녁 고민 끝</p>
-      </div>
-    </a>
-    <a class="test" href="dessert/" style="margin-top:12px">
-      <div class="em" style="background:#ffe9f2">🍰</div>
-      <div>
-        <h2>디메추 · 오늘 먹고 싶은 디저트는?<span class="new">NEW</span></h2>
-        <p>요즘 핫한 디저트부터 아는 맛까지</p>
-      </div>
-    </a>
-    <a class="test" href="drink/" style="margin-top:12px">
-      <div class="em" style="background:#fff4dc">🍻</div>
-      <div>
-        <h2>술메추 · 오늘 한잔, 뭐 마실까?<span class="new">NEW</span></h2>
-        <p>술과 안주 조합까지 한 번에 (성인용)</p>
-      </div>
-    </a>
-    <div class="soon">다음 콘텐츠도 준비 중이에요 🧪</div>
+    <h2>오늘 뭐 먹지</h2>
+    <a class="item" href="lunch/"><span class="em">🍱</span><div><b>점메추</b><small>오늘의 점심메뉴는?</small></div><span class="go">›</span></a>
+    <a class="item" href="dinner/"><span class="em">🍖</span><div><b>저메추</b><small>오늘의 저녁메뉴는?</small></div><span class="go">›</span></a>
+    <a class="item" href="dessert/"><span class="em">🍰</span><div><b>디메추</b><small>오늘 먹고 싶은 디저트는?</small></div><span class="go">›</span></a>
+    <a class="item" href="night/"><span class="em">🌙</span><div><b>야메추</b><small>오늘 밤 야식은?</small></div><span class="go">›</span></a>
+    <a class="item" href="drink/"><span class="em">🍻</span><div><b>술메추</b><small>오늘 한잔, 뭐 마실까? (성인)</small></div><span class="go">›</span></a>
 
-    <footer><a href="../" style="color:inherit">MONOJI 홈</a> · © monojilab</footer>
+    <h2>테스트</h2>
+    <a class="item" href="office-mbti/"><span class="em">💼</span><div><b>MBTI 직장인 유형 테스트</b><small>회사에서 나는 어떤 직장인일까?</small></div><span class="go">›</span></a>
+
+    <footer><a href="../">MONOJI</a> · © monojilab</footer>
   </div>
 </body>
 </html>
