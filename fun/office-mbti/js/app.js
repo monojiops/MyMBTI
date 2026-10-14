@@ -43,9 +43,30 @@
     const list = [f, ...loadFriends().filter(x => key(x) !== key(f))].slice(0, 12);
     try { localStorage.setItem(FRIENDS_KEY, JSON.stringify(list)); } catch (e) { /* 저장 불가 환경 */ }
   }
-  function render(html) {
-    app.innerHTML = `<div class="fade-in">${html}</div>`;
+  // 이모지를 그림(Noto Emoji SVG, ../assets/emoji/)으로. 파일이 없으면 글자 이모지로 대체
+  function ic(em, cls) {
+    const cp = Array.from(em).map(c => c.codePointAt(0)).filter(c => c !== 0xfe0f).map(c => c.toString(16)).join('_');
+    return `<img class="ic ${cls || ''}" src="../assets/emoji/${cp}.svg" alt="${esc(em)}" draggable="false" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:this.className,textContent:this.alt}))">`;
+  }
+  function render(html, noMore) {
+    const top = `<div class="topbar"><a href="../">← monojilab fun</a><span>직장인 MBTI</span></div>`;
+    app.innerHTML = `<div class="fade-in">${top}${html}${noMore ? '' : moreHtml()}</div>`;
     window.scrollTo({ top: 0 });
+  }
+
+  // 다른 콘텐츠 (메추 시리즈)
+  function moreHtml() {
+    const items = [
+      ['lunch', '🍱', '점메추', '오늘의 점심메뉴는?'], ['dinner', '🍖', '저메추', '오늘의 저녁메뉴는?'],
+      ['dessert', '🍰', '디메추', '오늘 먹고 싶은 디저트는?'], ['night', '🌙', '야메추', '오늘 밤 야식은?'],
+    ];
+    return `
+      <section class="card">
+        <h3>이것도 해보세요</h3>
+        <div class="more-grid">${items.map(([p, em, t, sub]) => `<a class="more-card" href="../${p}/">${ic(em, 'em')}<b>${t}</b><small>${sub}</small></a>`).join('')}</div>
+        <a class="more-wide" href="../drink/">${ic('🍻', 'em')}<div><b>술메추</b><small>오늘 한잔, 뭐 마실까? (성인)</small></div></a>
+      </section>
+      <p class="foot"><a href="../">monojilab fun</a></p>`;
   }
 
   // ---------- 결과 계산 ----------
@@ -189,7 +210,7 @@
     const fc = f && charOf(f);
     const invite = f ? `
       <div class="invite">
-        <span class="em">${fc.emoji}</span>
+        ${ic(fc.emoji, 'em')}
         <div><b>${f.name ? esc(f.name) + '님' : '동료'}</b>이 업무 케미를 보자고 초대했어요!<br>
         <span class="muted">${fc.name} · ${f.type}</span></div>
       </div>` : '';
@@ -197,8 +218,8 @@
 
     render(`
       ${invite}
-      <section class="card center">
-        <div class="hero-emojis">📊🎤☕💡👔</div>
+      <div class="hero">${['💼', '📊', '🎤', '☕', '💡'].map((e, k) => ic(e, 'h' + k)).join('')}</div>
+      <section class="card center" style="padding-top:20px">
         <h1>회사에서 나는<br>어떤 직장인일까?</h1>
         <p class="muted">${Q.length}개 질문으로 MBTI 유형을 알아보고<br>40가지 직장인 유형 중 나는 누구인지 알려드려요.</p>
         <input class="input" id="name" maxlength="10" placeholder="닉네임 (선택, 케미 결과에 표시돼요)" value="${esc(state.name)}">
@@ -242,7 +263,7 @@
           <button class="btn ghost" data-act="back">${i === 0 ? '처음으로' : '← 이전 질문'}</button>
         </div>
       </section>
-    `);
+    `, true);
     app.querySelectorAll('.scale button').forEach(b => {
       b.onclick = () => {
         state.answers[i] = Number(b.dataset.v);
@@ -293,14 +314,14 @@
         <section class="card center">
           <h2>${f.name ? esc(f.name) + '님과' : '친구와'} 같은 팀이라면</h2>
           <div class="compat-head">
-            <div class="who"><span class="em">${c.emoji}</span>${me.name ? esc(me.name) : '나'}<br><b>${c.name}</b></div>
-            <div class="heart">💗</div>
-            <div class="who"><span class="em">${fc.emoji}</span>${f.name ? esc(f.name) : '동료'}<br><b>${fc.name}</b></div>
+            <div class="who">${ic(c.emoji, 'em')}${me.name ? esc(me.name) : '나'}<br><b>${c.name}</b></div>
+            <div class="heart">${ic('💗')}</div>
+            <div class="who">${ic(fc.emoji, 'em')}${f.name ? esc(f.name) : '동료'}<br><b>${fc.name}</b></div>
           </div>
           <div class="score">${r.score}점</div>
           <div class="score-label">${r.label}</div>
           <ul class="compat-list">${r.lines.map(l => `<li>${l}</li>`).join('')}</ul>
-          <button class="btn kakao" data-act="kakao-back">💬 ${f.name ? esc(f.name) + '님에게' : '동료에게'} 내 결과 보내기</button>
+          <button class="btn kakao" data-act="kakao-back">${f.name ? esc(f.name) + '님에게' : '동료에게'} 내 결과 보내기</button>
         </section>`;
     }
 
@@ -311,14 +332,14 @@
           <div class="chips">${others.map((x, i) => {
             const xc = charOf(x);
             const sc = compat(me, x).score;
-            return `<button class="chip" data-hist="${i}">${xc.emoji} ${x.name ? esc(x.name) : x.type} <b>${sc}점</b></button>`;
+            return `<button class="chip" data-hist="${i}">${ic(xc.emoji, 'em')} ${x.name ? esc(x.name) : x.type} <b>${sc}점</b></button>`;
           }).join('')}</div>
         </div>` : '';
 
     const best = (window.BEST_MATCH[me.type] || []).slice(0, 2);
     const matchHtml = best.map(t => {
       const m = CH[`${t}-A`];
-      return `<div class="match"><span class="em">${m.emoji}</span><b>${m.name}</b>${t}</div>`;
+      return `<div class="match">${ic(m.emoji, 'em')}<b>${m.name}</b>${t}</div>`;
     }).join('');
 
     const pill = me.hidden
@@ -329,13 +350,13 @@
       ${compatHtml}
       <section class="card center">
         <p class="muted">회사에서 ${me.name ? esc(me.name) + '님은' : '나는'}</p>
-        <div class="char-badge" style="background:${c.color}22">${c.emoji}</div>
+        <div class="char-badge" style="background:${c.color}1f">${ic(c.emoji)}</div>
         ${pill}
         <div class="char-name">${c.name}</div>
         <p class="char-tag">${c.tag}</p>
         <p class="desc">${c.desc}</p>
         <div class="keys">${c.keys.map(k => `<span>#${k}</span>`).join('')}</div>
-        ${me.hidden ? '<p class="muted">✨ 두 가지 이상 성향이 정확히 반반인 사람만 나오는 히든 유형이에요!</p>' : ''}
+        ${me.hidden ? '<p class="muted">두 가지 이상 성향이 정확히 반반인 사람만 나오는 히든 유형이에요!</p>' : ''}
       </section>
 
       <section class="card">
@@ -349,7 +370,7 @@
         </div>
       </section>
 
-      ${matchHtml ? `<section class="card"><h3>💞 나와 손발이 잘 맞는 동료</h3><div class="match-grid">${matchHtml}</div></section>` : ''}
+      ${matchHtml ? `<section class="card"><h3>나와 손발이 잘 맞는 동료</h3><div class="match-grid">${matchHtml}</div></section>` : ''}
 
       <section class="card center" id="chem">
         <h3>동료와 케미 보기</h3>
@@ -370,10 +391,10 @@
       <section class="card center">
         <h3>MBTI를 모르는 동료라면</h3>
         <p class="muted">링크를 보내면 동료가 테스트를 마치는 순간<br>둘의 케미 점수가 바로 나와요.</p>
-        <button class="btn kakao" data-act="kakao">💬 카카오톡으로 공유하기</button>
+        <button class="btn kakao" data-act="kakao">카카오톡으로 공유하기</button>
         <div class="row">
-          <button class="btn secondary" data-act="copy">🔗 링크 복사</button>
-          <button class="btn secondary" data-act="native">📤 다른 앱</button>
+          <button class="btn secondary" data-act="copy">링크 복사</button>
+          <button class="btn secondary" data-act="native">다른 앱</button>
         </div>
         <button class="btn ghost" data-act="retry">다시 테스트하기</button>
         <button class="btn ghost" data-act="dex">40가지 직장인 유형 전체 보기</button>
@@ -424,7 +445,7 @@
     const typeLabel = c.hidden ? '히든 유형' : `${sel} · ${window.TYPES[sel.slice(0, 4)]}`;
     render(`
       <section class="card center">
-        <div class="char-badge" style="background:${c.color}22;width:110px;height:110px;font-size:60px">${c.emoji}</div>
+        <div class="char-badge small-badge" style="background:${c.color}1f">${ic(c.emoji)}</div>
         <div class="char-name" style="font-size:24px">${c.name}</div>
         <p class="muted" style="margin:2px 0 6px">${typeLabel}</p>
         <p class="char-tag" style="margin-bottom:6px">${c.tag}</p>
@@ -436,7 +457,7 @@
           ${ids.map(id => {
             const x = CH[id];
             const sub = x.hidden ? 'HIDDEN' : id;
-            return `<button class="dex-item${id === myId ? ' mine' : ''}" data-id="${id}"><span class="em">${x.emoji}</span>${x.name}<small>${sub}</small></button>`;
+            return `<button class="dex-item${id === myId ? ' mine' : ''}" data-id="${id}">${ic(x.emoji, 'em')}${x.name}<small>${sub}</small></button>`;
           }).join('')}
         </div>
         <button class="btn" data-act="home">${state.me ? '내 결과로 돌아가기' : '테스트 하러 가기'}</button>
