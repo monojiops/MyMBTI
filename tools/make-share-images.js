@@ -2,14 +2,14 @@
 //  - fun/<메추>/share/<메뉴id>.png : 메뉴별 이미지 (결과 공유할 때 씀)
 //  - fun/<메추>/og.png              : 페이지 대표 이미지
 //  - fun/office-mbti/share/<유형>.png, og.png : 직장인 MBTI 유형별 이미지
-// 실행: 저장소 폴더에서 python3 -m http.server 8765 를 켜고
+// 실행: (특정 페이지만: ONLY=stretch) 저장소 폴더에서 python3 -m http.server 8765 를 켜고
 //       NODE_PATH=$(npm root -g) node tools/make-share-images.js
 // 카톡이 가운데를 잘라도 보이게 그림과 글자는 가운데 400px 안에 둬요.
 const { chromium } = require('playwright');
 const fs = require('fs');
 const path = require('path');
 const BASE = 'http://localhost:8765';
-const TYPES = ['lunch', 'dinner', 'dessert', 'drink', 'night'];
+const TYPES = (process.env.ONLY || 'lunch,dinner,dessert,drink,night,stretch').split(',');
 
 function cp(em) { return Array.from(em).map(c => c.codePointAt(0)).filter(c => c !== 0xfe0f).map(c => c.toString(16)).join('_'); }
 function esc(s) { return String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])); }
@@ -60,7 +60,8 @@ function page(T, main, side, title, sub, accent) {
     console.log(t, M.length);
   }
 
-  // 직장인 MBTI
+  // 직장인 MBTI (ONLY로 특정 페이지만 만들 때는 건너뜀)
+  if (!process.env.ONLY)
   {
     const ctx = {};
     new Function('window', fs.readFileSync('fun/office-mbti/js/data.js', 'utf8'))(ctx);

@@ -135,6 +135,12 @@ p { margin: 0; }
 }
 .alt .em { width: 32px; height: 32px; flex: none; font-size: 26px; text-align: center; }
 
+/* 따라 하기 순서 */
+.steps { text-align: left; margin-top: 16px; padding: 16px 18px; border-radius: 16px; background: var(--tint); }
+.steps-h { font-family: 'Jua', 'Gowun Dodum', sans-serif; font-size: 16px; margin-bottom: 8px; color: var(--primary); }
+.steps ol { margin: 0; padding-left: 20px; }
+.steps li { padding: 4px 0; font-size: 15px; word-break: keep-all; }
+
 /* 다른 메추 */
 .more-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
 .more-card, .more-wide { background: var(--soft); border-radius: 16px; text-decoration: none; color: var(--text); }
@@ -168,3 +174,4 @@ h3 { font-size: 17px; }
 .btn { font-size: 17px; }
 .choice { font-size: 17px; }
 .choice.on { font-weight: 400; }
+.more-card:last-child:nth-child(odd) { grid-column: span 2; }

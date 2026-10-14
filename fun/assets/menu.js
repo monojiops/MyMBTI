@@ -1,5 +1,6 @@
 // ==============================================
-//  메추 시리즈 공통 엔진 (점메추, 저메추, 디메추, 술메추, 야메추)
+//  메추 시리즈 공통 엔진 (점메추, 저메추, 디메추, 술메추, 야메추, 오늘의 스트레칭)
+//  THEME.noMap이면 지도 버튼을 숨기고, 항목에 steps가 있으면 따라 하기 순서를 보여줘요
 //  각 페이지는 js/config.js(THEME)와 js/data.js(QUESTIONS, MENUS)만 다르게 둡니다.
 //
 //  질문 type
@@ -23,6 +24,7 @@
     { path: 'dessert', em: '🍰', title: '디메추', sub: '오늘 먹고 싶은 디저트는?' },
     { path: 'drink', em: '🍻', title: '술메추', sub: '오늘 한잔, 뭐 마실까?' },
     { path: 'night', em: '🌙', title: '야메추', sub: '오늘 밤 야식은?' },
+    { path: 'stretch', em: '🧘', title: '스트레칭', sub: '오늘 몸 풀기는?' },
   ];
 
   const state = {
@@ -62,6 +64,11 @@
   function byId(id) { return MENUS.find(m => m.id === id); }
   function mapUrl(m) { return `https://map.kakao.com/link/search/${encodeURIComponent(m.q || m.name.split(/[·+]/)[0])}`; }
   function placeLabel(m) { return `근처 ${esc([m.q || m.name, T.placeWord].filter(Boolean).join(' '))} 찾기`; }
+  // 따라 하기 순서가 있는 항목(스트레칭 등)은 결과에 순서를 보여줘요
+  function stepsHtml(m) {
+    if (!m.steps) return '';
+    return `<div class="steps"><p class="steps-h">이렇게 해보세요</p><ol>${m.steps.map(x => `<li>${esc(x)}</li>`).join('')}</ol></div>`;
+  }
   function optOf(q) { return q.opts.find(o => o.key === state.answers[q.id]); }
 
   // ---------- 추천 ----------
@@ -135,7 +142,7 @@
       objectType: 'feed',
       content: {
         title: `${T.sharePrefix} ${m.em} ${m.name} 어때요?`,
-        description: `${state.name ? state.name + '님이' : '친구가'} ${T.short} 받은 메뉴예요. ${m.desc}`,
+        description: `${state.name ? state.name + '님이' : '친구가'} ${T.short} 받은 ${T.itemWord || '메뉴'}예요. ${m.desc}`,
         imageUrl: `${cfg.SITE_URL}/share/${m.id}.png`,
         imageWidth: 800,
         imageHeight: 400,
@@ -165,7 +172,8 @@
         <div class="plate">${ic(sh.menu.em)}</div>
         <div class="menu-name">${esc(sh.menu.name)} 어때요?</div>
         <p class="menu-desc">${esc(sh.menu.desc)}</p>
-        <a class="btn dark" style="margin-top:20px" href="${mapUrl(sh.menu)}" target="_blank" rel="noopener">${placeLabel(sh.menu)}</a>
+        ${stepsHtml(sh.menu)}
+        ${T.noMap ? '' : `<a class="btn dark" style="margin-top:20px" href="${mapUrl(sh.menu)}" target="_blank" rel="noopener">${placeLabel(sh.menu)}</a>`}
       </section>` : '';
 
     render(`
@@ -263,8 +271,9 @@
         <div class="menu-name">${esc(m.name)}</div>
         <p class="menu-desc">${esc(m.desc)}</p>
         ${why.length ? `<ul class="reasons">${why.map(r => `<li>${r}</li>`).join('')}</ul>` : ''}
-        <a class="btn dark" href="${mapUrl(m)}" target="_blank" rel="noopener" style="margin-top:16px">${placeLabel(m)}</a>
-        <button class="btn secondary" data-act="next">다른 메뉴 보기</button>
+        ${stepsHtml(m)}
+        ${T.noMap ? '' : `<a class="btn dark" href="${mapUrl(m)}" target="_blank" rel="noopener" style="margin-top:16px">${placeLabel(m)}</a>`}
+        <button class="btn secondary" data-act="next">${T.nextWord || '다른 메뉴 보기'}</button>
       </section>
 
       <section>
@@ -312,7 +321,7 @@
         <a class="more-card" href="../${f.path}/">${ic(f.em, 'em')}<b>${f.title}</b><small>${f.sub}</small></a>`).join('');
     return `
       <section>
-        <h3>다른 메추도 받아보세요</h3>
+        <h3>이것도 해보세요</h3>
         <div class="more-grid">${items}</div>
         <a class="more-wide" href="../office-mbti/">${ic('💼', 'em')}<div><b>MBTI 직장인 유형 테스트</b><small>회사에서 나는 어떤 직장인일까?</small></div></a>
       </section>
