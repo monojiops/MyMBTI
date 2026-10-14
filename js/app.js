@@ -86,18 +86,18 @@
     score += (hash(ids) % 5) - 2;
     score = Math.max(35, Math.min(99, score));
 
-    const label = score >= 95 ? '천생연분 💞' : score >= 85 ? '환상의 케미 ✨' : score >= 72 ? '잘 맞는 친구 😊'
-      : score >= 60 ? '노력하면 찰떡 🤝' : '극과 극 매력 ⚡';
+    const label = score >= 95 ? '드림팀 💼' : score >= 85 ? '환상의 업무 케미 ✨' : score >= 72 ? '믿고 맡기는 동료 😊'
+      : score >= 60 ? '맞춰가면 시너지 🤝' : '회의 때마다 불꽃 ⚡';
 
     const lines = [];
-    if (A[1] === B[1]) lines.push(A[1] === 'N' ? '🔮 둘 다 상상력이 풍부해서 엉뚱한 이야기로 밤새 수다 떨 수 있어요.' : '📌 둘 다 현실 감각이 좋아서 맛집, 여행 계획 이야기가 착착 맞아요.');
-    else lines.push('🌗 세상을 보는 관점이 달라서 서로에게 새로운 시각을 줘요. 이야기가 엇갈릴 땐 한 번 더 설명해 주세요.');
-    if (A[0] !== B[0]) lines.push('🎤 한 명이 분위기를 띄우고 한 명이 차분히 받쳐주는 찰떡 조합이에요.');
-    else lines.push(A[0] === 'E' ? '🎉 둘 다 에너지가 넘쳐서 같이 있으면 언제나 시끌벅적!' : '🛋️ 말없이 같이 있어도 편안한, 조용한 힐링 메이트예요.');
-    if (A[2] === B[2]) lines.push(A[2] === 'T' ? '🧠 감정 소모 없이 논리적으로 깔끔하게 대화하는 사이예요.' : '💗 서로의 마음을 말하지 않아도 잘 알아줘요.');
-    else lines.push('🤲 한 명은 머리로, 한 명은 마음으로! 서운한 건 쌓아두지 말고 바로 말하는 게 좋아요.');
-    if (A[3] !== B[3]) lines.push('🗓️ 계획러와 즉흥러, 서로의 빈틈을 자연스럽게 채워줘요.');
-    else lines.push(A[3] === 'J' ? '⏰ 약속 시간 칼같은 두 사람, 함께하는 일은 척척 진행돼요.' : '🎒 즉흥 여행 최고의 파트너! 단, 예약은 누가 할지 미리 정해두세요.');
+    if (A[1] === B[1]) lines.push(A[1] === 'N' ? '🔮 둘 다 큰 그림을 좋아해서 브레인스토밍이 끝없이 이어져요.' : '📌 둘 다 현실 감각이 좋아서 실행 계획이 착착 맞아요.');
+    else lines.push('🌗 한 명은 아이디어, 한 명은 디테일 담당. 보고서 방향이 엇갈릴 땐 예시를 들어 한 번 더 설명해 주세요.');
+    if (A[0] !== B[0]) lines.push('🎤 한 명은 발표, 한 명은 자료 준비. 역할 분담이 자연스러운 조합이에요.');
+    else lines.push(A[0] === 'E' ? '🎉 둘 다 에너지가 넘쳐서 팀 분위기는 최고! 대신 집중 시간은 따로 정해두세요.' : '🎧 메신저로 대화하는 게 더 편한, 조용하지만 손발 맞는 사이예요.');
+    if (A[2] === B[2]) lines.push(A[2] === 'T' ? '🧠 피드백을 돌려 말하지 않아도 서로 상처받지 않는 사이예요.' : '💗 힘든 날엔 말없이 커피 한 잔 건네주는 사이예요.');
+    else lines.push('🤲 한 명은 논리로, 한 명은 공감으로 설득해요. 피드백할 땐 말투를 한 번 더 신경 써 주세요.');
+    if (A[3] !== B[3]) lines.push('🗓️ 일정 짜는 사람과 위기 대응하는 사람, 서로의 빈틈을 채워줘요.');
+    else lines.push(A[3] === 'J' ? '⏰ 마감 일주일 전에 끝내는 두 사람, 프로젝트가 늘 순조로워요.' : '🔥 마감 직전 폭발력은 최강! 단, 중간 점검 일정은 꼭 잡아두세요.');
     return { score, label, lines };
   }
 
@@ -140,11 +140,11 @@
       objectType: 'feed',
       content: {
         title: `${who} ${c.emoji} ${c.name} (${p.type})`,
-        description: `${c.tag}. 나랑 궁합 몇 점인지 테스트해볼래?`,
+        description: `${c.tag}. 우리 같은 팀이면 케미 몇 점일까?`,
         imageUrl: cfg.SHARE_IMAGE,
         link: { mobileWebUrl: url, webUrl: url },
       },
-      buttons: [{ title: '나도 하고 궁합 보기', link: { mobileWebUrl: url, webUrl: url } }],
+      buttons: [{ title: '나도 하고 케미 보기', link: { mobileWebUrl: url, webUrl: url } }],
     });
   }
   async function copyLink(url, msg) {
@@ -162,7 +162,7 @@
     const c = charOf(p);
     const url = shareUrl(p);
     if (navigator.share) {
-      try { await navigator.share({ title: cfg.SITE_NAME, text: `나는 ${c.emoji} ${c.name}! 나랑 궁합 볼래?`, url }); return; }
+      try { await navigator.share({ title: cfg.SITE_NAME, text: `회사에서 나는 ${c.emoji} ${c.name}! 우리 케미 볼래?`, url }); return; }
       catch (e) { if (e.name === 'AbortError') return; }
     }
     copyLink(url);
@@ -175,21 +175,21 @@
     const invite = f ? `
       <div class="invite">
         <span class="em">${fc.emoji}</span>
-        <div><b>${f.name ? esc(f.name) + '님' : '친구'}</b>이 궁합을 보자고 초대했어요!<br>
+        <div><b>${f.name ? esc(f.name) + '님' : '동료'}</b>이 업무 케미를 보자고 초대했어요!<br>
         <span class="muted">${fc.name} · ${f.type}</span></div>
       </div>` : '';
-    const quick = f && state.me ? `<button class="btn secondary" data-act="quick">저장된 내 결과로 바로 궁합 보기</button>` : '';
+    const quick = f && state.me ? `<button class="btn secondary" data-act="quick">저장된 내 결과로 바로 케미 보기</button>` : '';
 
     render(`
       ${invite}
       <section class="card center">
-        <div class="hero-emojis">🦊🦄🐻🌻🐬</div>
-        <h1>나와 닮은<br>MBTI 캐릭터는?</h1>
-        <p class="muted">${Q.length}개 질문으로 MBTI 유형을 알아보고<br>40가지 캐릭터 중 나와 꼭 맞는 친구를 찾아드려요.</p>
-        <input class="input" id="name" maxlength="10" placeholder="닉네임 (선택, 궁합에 표시돼요)" value="${esc(state.name)}">
+        <div class="hero-emojis">📊🎤☕💡👔</div>
+        <h1>회사에서 나는<br>어떤 직장인일까?</h1>
+        <p class="muted">${Q.length}개 질문으로 MBTI 유형을 알아보고<br>40가지 직장인 유형 중 나는 누구인지 알려드려요.</p>
+        <input class="input" id="name" maxlength="10" placeholder="닉네임 (선택, 케미 결과에 표시돼요)" value="${esc(state.name)}">
         <button class="btn" data-act="start">테스트 시작하기</button>
         ${quick}
-        <button class="btn ghost" data-act="dex">40가지 캐릭터 도감 보기</button>
+        <button class="btn ghost" data-act="dex">40가지 직장인 유형 전체 보기</button>
       </section>
       <p class="muted center">약 2분 소요 · 결과는 이 기기에만 저장돼요</p>
     `);
@@ -275,16 +275,16 @@
       const r = compat(me, f);
       compatHtml = `
         <section class="card center">
-          <h2>${f.name ? esc(f.name) + '님과의' : '친구와의'} 궁합</h2>
+          <h2>${f.name ? esc(f.name) + '님과' : '친구와'} 같은 팀이라면</h2>
           <div class="compat-head">
             <div class="who"><span class="em">${c.emoji}</span>${me.name ? esc(me.name) : '나'}<br><b>${c.name}</b></div>
             <div class="heart">💗</div>
-            <div class="who"><span class="em">${fc.emoji}</span>${f.name ? esc(f.name) : '친구'}<br><b>${fc.name}</b></div>
+            <div class="who"><span class="em">${fc.emoji}</span>${f.name ? esc(f.name) : '동료'}<br><b>${fc.name}</b></div>
           </div>
           <div class="score">${r.score}점</div>
           <div class="score-label">${r.label}</div>
           <ul class="compat-list">${r.lines.map(l => `<li>${l}</li>`).join('')}</ul>
-          <button class="btn kakao" data-act="kakao-back">💬 ${f.name ? esc(f.name) + '님에게' : '친구에게'} 내 결과 보내기</button>
+          <button class="btn kakao" data-act="kakao-back">💬 ${f.name ? esc(f.name) + '님에게' : '동료에게'} 내 결과 보내기</button>
         </section>`;
     }
 
@@ -301,14 +301,14 @@
     render(`
       ${compatHtml}
       <section class="card center">
-        <p class="muted">${me.name ? esc(me.name) + '님과' : '나와'} 닮은 캐릭터는</p>
+        <p class="muted">회사에서 ${me.name ? esc(me.name) + '님은' : '나는'}</p>
         <div class="char-badge" style="background:${c.color}22">${c.emoji}</div>
         ${pill}
         <div class="char-name">${c.name}</div>
         <p class="char-tag">${c.tag}</p>
         <p class="desc">${c.desc}</p>
         <div class="keys">${c.keys.map(k => `<span>#${k}</span>`).join('')}</div>
-        ${me.hidden ? '<p class="muted">✨ 두 가지 이상 성향이 정확히 반반인 사람만 만나는 히든 캐릭터예요!</p>' : ''}
+        ${me.hidden ? '<p class="muted">✨ 두 가지 이상 성향이 정확히 반반인 사람만 나오는 히든 유형이에요!</p>' : ''}
       </section>
 
       <section class="card">
@@ -322,18 +322,18 @@
         </div>
       </section>
 
-      ${matchHtml ? `<section class="card"><h3>💞 나와 잘 맞는 캐릭터</h3><div class="match-grid">${matchHtml}</div></section>` : ''}
+      ${matchHtml ? `<section class="card"><h3>💞 나와 손발이 잘 맞는 동료</h3><div class="match-grid">${matchHtml}</div></section>` : ''}
 
       <section class="card center">
-        <h3>친구와 궁합 보기</h3>
-        <p class="muted">링크를 받은 친구가 테스트를 하면<br>우리 둘의 궁합 점수가 바로 나와요.</p>
+        <h3>동료와 케미 보기</h3>
+        <p class="muted">링크를 받은 동료가 테스트를 하면<br>같은 팀일 때 케미 점수가 바로 나와요.</p>
         <button class="btn kakao" data-act="kakao">💬 카카오톡으로 공유하기</button>
         <div class="row">
           <button class="btn secondary" data-act="copy">🔗 링크 복사</button>
           <button class="btn secondary" data-act="native">📤 다른 앱</button>
         </div>
         <button class="btn ghost" data-act="retry">다시 테스트하기</button>
-        <button class="btn ghost" data-act="dex">40가지 캐릭터 도감</button>
+        <button class="btn ghost" data-act="dex">40가지 직장인 유형 전체 보기</button>
       </section>
     `);
 
@@ -352,7 +352,7 @@
     const ids = Object.keys(CH);
     const sel = selected || myId || ids[0];
     const c = CH[sel];
-    const typeLabel = c.hidden ? '히든 캐릭터' : `${sel} · ${window.TYPES[sel.slice(0, 4)]}`;
+    const typeLabel = c.hidden ? '히든 유형' : `${sel} · ${window.TYPES[sel.slice(0, 4)]}`;
     render(`
       <section class="card center">
         <div class="char-badge" style="background:${c.color}22;width:110px;height:110px;font-size:60px">${c.emoji}</div>
@@ -362,7 +362,7 @@
         <p class="desc" style="margin:0">${c.desc}</p>
       </section>
       <section class="card">
-        <h3>40가지 캐릭터 도감</h3>
+        <h3>40가지 직장인 유형</h3>
         <div class="dex">
           ${ids.map(id => {
             const x = CH[id];

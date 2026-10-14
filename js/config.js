@@ -3,7 +3,7 @@
 // ==============================================
 window.SITE_CONFIG = {
   // 사이트 이름과 배포 주소 (끝에 / 없이). 카카오 공유 링크에 쓰입니다.
-  SITE_NAME: '나의 MBTI 캐릭터',
+  SITE_NAME: 'MBTI 직장인 유형 테스트',
   SITE_URL: 'https://YOUR-DOMAIN.com',
 
   // 카카오 개발자 콘솔 > 내 애플리케이션 > 앱 키 > JavaScript 키
