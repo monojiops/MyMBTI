@@ -24,8 +24,9 @@
     clearTimeout(toast._t);
     toast._t = setTimeout(() => t.classList.remove('show'), 1800);
   }
+  const TOPBAR = `<div class="topbar"><a href="../">← monojilab <b>fun</b></a><span class="muted">🍱 점메추</span></div>`;
   function render(html) {
-    app.innerHTML = `<div class="fade-in">${html}</div>`;
+    app.innerHTML = `<div class="fade-in">${TOPBAR}${html}</div>`;
     window.scrollTo({ top: 0 });
   }
   function byId(id) { return MENUS.find(m => m.id === id); }
@@ -126,22 +127,23 @@
   function viewHome() {
     const sh = state.shared;
     const invite = sh ? `
-      <section class="card center">
-        <p class="muted">${sh.name ? esc(sh.name) + '님이' : '동료가'} 오늘 점심으로</p>
+      <section class="card center invite-card">
+        <span class="ribbon">📨 ${sh.name ? esc(sh.name) + '님의' : '동료의'} 점심 제안</span>
         <div class="menu-badge">${sh.menu.em}</div>
-        <div class="menu-name">${esc(sh.menu.name)}</div>
-        <p class="menu-desc">어때요? 래요! ${esc(sh.menu.desc)}</p>
-        <a class="btn map" href="${mapUrl(sh.menu)}" target="_blank" rel="noopener" style="text-decoration:none">📍 근처 ${esc(sh.menu.name)} 맛집 찾기</a>
+        <div class="menu-name">${esc(sh.menu.name)} 어때요?</div>
+        <p class="menu-desc">${esc(sh.menu.desc)}</p>
+        <a class="btn map" href="${mapUrl(sh.menu)}" target="_blank" rel="noopener">📍 근처 ${esc(sh.menu.name)} 맛집 찾기</a>
       </section>` : '';
 
     render(`
       ${invite}
-      <section class="card center">
-        <div class="hero-emojis">🍜🍱🍔🍣🥘</div>
+      <section class="hero">
+        <div class="float"><span>🍜</span><span>🍱</span><span>🍔</span><span>🍣</span><span>🥘</span></div>
         <h1>오늘의 점심메뉴는?</h1>
-        <p class="muted">점심 고민은 이제 그만!<br>질문 ${Q.length}개에 답하면 오늘 메뉴를 골라드려요.</p>
+        <p>점심 고민은 이제 그만!<br>질문 ${Q.length}개면 오늘 메뉴가 정해져요.</p>
+        <div class="stats"><span>⏱ 30초</span><span>🍽 메뉴 ${MENUS.length}가지</span><span>💬 동료에게 공유</span></div>
         <input class="input" id="name" maxlength="10" placeholder="닉네임 (선택, 공유할 때 표시돼요)" value="${esc(state.name)}">
-        <button class="btn" data-act="start">${sh ? '나도 점메추 받기' : '점메추 받기'}</button>
+        <button class="btn" data-act="start">${sh ? '나도 점메추 받기' : '점메추 받기 →'}</button>
         <button class="btn ghost" data-act="random">🎲 고민 없이 아무거나 골라줘</button>
       </section>
       ${moreHtml()}
@@ -153,7 +155,7 @@
       state.answers = {};
       state.ranked = MENUS.slice().sort(() => Math.random() - 0.5);
       state.pos = 0;
-      viewResult();
+      viewRoulette();
     };
   }
 
@@ -166,6 +168,7 @@
       <section class="card">
         <div class="progress"><div style="width:${(i / Q.length) * 100}%"></div></div>
         <div class="q-meta"><span>Q${i + 1}</span><span>${i + 1} / ${Q.length}</span></div>
+        <div class="q-emoji">${q.em}</div>
         <p class="q-text">${esc(q.text)}</p>
         <div class="choices">
           ${q.opts.map((o, k) => `<button class="choice${cur === o.key ? ' on' : ''}" data-k="${k}"><span class="em">${o.em}</span>${esc(o.label)}</button>`).join('')}
@@ -181,13 +184,35 @@
         b.classList.add('on');
         setTimeout(() => {
           if (i < Q.length - 1) { state.idx++; viewQuiz(); }
-          else { state.ranked = rank(); state.pos = 0; viewResult(); }
+          else { state.ranked = rank(); state.pos = 0; viewRoulette(); }
         }, 160);
       };
     });
     app.querySelector('[data-act="back"]').onclick = () => {
       if (i === 0) viewHome(); else { state.idx--; viewQuiz(); }
     };
+  }
+
+  // ---------- 화면: 룰렛 (결과 직전 두근두근) ----------
+  function viewRoulette() {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { viewResult(); return; }
+    render(`
+      <section class="card roulette">
+        <p class="muted">오늘의 점심을 고르는 중...</p>
+        <div class="slot spin" id="slot">🍽️</div>
+        <div class="slot-name" id="slot-name"></div>
+      </section>
+    `);
+    const slot = document.getElementById('slot');
+    const nm = document.getElementById('slot-name');
+    let n = 0, delay = 60;
+    const tick = () => {
+      const m = MENUS[Math.floor(Math.random() * MENUS.length)];
+      slot.textContent = m.em; nm.textContent = m.name;
+      n++; delay *= 1.12;
+      if (n < 16) setTimeout(tick, delay); else viewResult();
+    };
+    tick();
   }
 
   // ---------- 화면: 결과 ----------
@@ -198,23 +223,23 @@
     const why = Object.keys(state.answers).length ? reasons(m, state.answers) : ['🎲 고민 없이 운명에 맡겼어요!'];
 
     render(`
-      <section class="card center">
-        <p class="muted">${state.name ? esc(state.name) + '님의' : '오늘의'} 점심 메뉴는</p>
+      <section class="result-hero">
+        <span class="ribbon">${state.name ? esc(state.name) + '님의' : '오늘의'} 점심 메뉴</span>
         <div class="menu-badge">${m.em}</div>
         <div class="menu-name">${esc(m.name)}</div>
         <p class="menu-desc">${esc(m.desc)}</p>
         <ul class="reasons">${why.map(r => `<li>${r}</li>`).join('')}</ul>
-        <a class="btn map" href="${mapUrl(m)}" target="_blank" rel="noopener" style="text-decoration:none;margin-top:16px">📍 근처 ${esc(m.name)} 맛집 찾기</a>
+        <a class="btn map" href="${mapUrl(m)}" target="_blank" rel="noopener" style="margin-top:16px">📍 근처 ${esc(m.name)} 맛집 찾기</a>
         <button class="btn secondary" data-act="next">🔄 이건 별로, 다른 메뉴</button>
       </section>
 
       <section class="card center">
         <h3>이것도 괜찮아요</h3>
-        <div class="alts">${alts.map((x, k) => `<button class="alt" data-alt="${k + 1}">${x.em} ${esc(x.name)}</button>`).join('')}</div>
+        <div class="alts">${alts.map((x, k) => `<button class="alt" data-alt="${k + 1}"><span class="em">${x.em}</span>${esc(x.name)}</button>`).join('')}</div>
       </section>
 
-      <section class="card center">
-        <h3>같이 먹을 동료에게 보내기</h3>
+      <section class="card center share-card">
+        <h3>👋 같이 먹을 동료 부르기</h3>
         <p class="muted">"오늘 점심 ${esc(m.name)} 어때요?" 하고 보내져요.</p>
         <button class="btn kakao" data-act="kakao">💬 카카오톡으로 보내기</button>
         <button class="btn secondary" data-act="copy">🔗 링크 복사</button>

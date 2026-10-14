@@ -5,37 +5,37 @@
 
 // 각 질문의 선택지는 key로 구분하고, app.js의 score()가 메뉴 태그와 비교해 점수를 매겨요.
 window.QUESTIONS = [
-  { id: 'mood', text: '오늘 기분은 어때요?', opts: [
+  { id: 'mood', em: '🙂', text: '오늘 기분은 어때요?', opts: [
     { key: 'good', em: '😊', label: '좋아요' },
     { key: 'tired', em: '😩', label: '지쳤어요' },
     { key: 'stress', em: '😤', label: '스트레스 만땅' },
     { key: 'meh', em: '😐', label: '그냥 그래요' },
   ] },
-  { id: 'weather', text: '오늘 날씨는요?', opts: [
+  { id: 'weather', em: '🌦️', text: '오늘 날씨는요?', opts: [
     { key: 'cold', em: '🥶', label: '추워요' },
     { key: 'hot', em: '🥵', label: '더워요' },
     { key: 'rain', em: '☔', label: '비 와요' },
     { key: 'ok', em: '🌤️', label: '딱 좋아요' },
   ] },
-  { id: 'kind', text: '오늘 당기는 건?', opts: [
+  { id: 'kind', em: '🍽️', text: '오늘 당기는 건?', opts: [
     { key: 'soup', em: '🍲', label: '뜨끈한 국물' },
     { key: 'rice', em: '🍚', label: '든든한 밥' },
     { key: 'noodle', em: '🍜', label: '후루룩 면' },
     { key: 'quick', em: '🥪', label: '가볍고 빠르게' },
   ] },
-  { id: 'spicy', text: '매운 건 어때요?', opts: [
+  { id: 'spicy', em: '🌶️', text: '매운 건 어때요?', opts: [
     { key: 2, em: '🔥', label: '화끈하게' },
     { key: 1, em: '🌶️', label: '살짝만' },
     { key: 0, em: '🙅', label: '안 매운 거' },
     { key: -1, em: '🤷', label: '상관없어요' },
   ] },
-  { id: 'budget', text: '오늘 점심 예산은?', opts: [
+  { id: 'budget', em: '💳', text: '오늘 점심 예산은?', opts: [
     { key: 1, em: '🪙', label: '만 원 이하' },
     { key: 2, em: '💵', label: '1~1.5만 원' },
     { key: 3, em: '💎', label: '오늘은 플렉스' },
     { key: 2.5, em: '🤔', label: '적당히' },
   ] },
-  { id: 'with', text: '누구랑 먹어요?', opts: [
+  { id: 'with', em: '🧑‍🤝‍🧑', text: '누구랑 먹어요?', opts: [
     { key: 'solo', em: '🙋', label: '혼밥' },
     { key: 'two', em: '👫', label: '한두 명이랑' },
     { key: 'group', em: '👥', label: '팀 다 같이' },
@@ -68,7 +68,7 @@ window.MENUS = [
   { id: 'soba', name: '메밀소바', em: '🥢', kind: 'noodle', spicy: 0, price: 2, tags: ['cool', 'solo', 'good'], desc: '쯔유에 콕 찍어 후루룩. 가볍고 깔끔하게.' },
   { id: 'pasta', name: '파스타', em: '🍝', kind: 'noodle', spicy: 0, price: 3, tags: ['good', 'two', 'boss'], desc: '오늘은 분위기 좀 내볼까요? 크림이냐 토마토냐.' },
   { id: 'jeyuk', name: '제육볶음', em: '🐷', kind: 'rice', spicy: 1, price: 1, tags: ['stress', 'group', 'solo'], desc: '직장인 점심 1순위. 쌈 싸 먹으면 기분이 좋아져요.' },
-  { id: 'donkatsu', name: '돈까스', em: '🍛', kind: 'rice', spicy: 0, price: 2, tags: ['good', 'solo', 'two'], desc: '바삭바삭 겉바속촉. 기분 좋은 날엔 튀김이죠.' },
+  { id: 'donkatsu', name: '돈까스', em: '🥩', kind: 'rice', spicy: 0, price: 2, tags: ['good', 'solo', 'two'], desc: '바삭바삭 겉바속촉. 기분 좋은 날엔 튀김이죠.' },
   { id: 'bibimbap', name: '비빔밥', em: '🥗', kind: 'rice', spicy: 1, price: 1, tags: ['cool', 'good', 'boss', 'solo'], desc: '나물 듬뿍, 고추장 한 숟갈. 건강하게 든든하게.' },
   { id: 'omurice', name: '오므라이스', em: '🍳', kind: 'rice', spicy: 0, price: 2, tags: ['good', 'tired', 'two'], desc: '폭신한 계란 이불 덮은 밥. 기분까지 몽글몽글.' },
   { id: 'curry', name: '카레', em: '🍛', kind: 'rice', spicy: 1, price: 1, tags: ['solo', 'tired', 'rain'], desc: '향긋한 카레 한 접시면 오후가 든든해요.' },
