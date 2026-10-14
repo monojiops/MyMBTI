@@ -3,12 +3,14 @@
 이 폴더 전체가 monojilab.com 사이트입니다. (README.md는 올라가도 상관없어요)
 
 - `index.html` 첫 화면: 테스트 목록
-- `office-mbti/` MBTI 직장인 유형 테스트 → https://monojilab.com/office-mbti/
+- `fun/` 재밌는 콘텐츠 모음 → https://monojilab.com/fun/
+- `fun/office-mbti/` MBTI 직장인 유형 테스트 → https://monojilab.com/fun/office-mbti/
+- `office-mbti/`, `lab/` 예전 주소. 새 주소로 넘겨주는 페이지만 남아 있어요
   - `js/config.js` 카카오 키, 광고 설정
   - `js/data.js` 질문, 40가지 유형, 궁합표
   - `og.png` 카카오톡 공유 미리보기 이미지
 
-새 테스트를 만들면 `office-mbti/` 옆에 폴더를 하나 더 만들고 첫 화면 목록에 추가합니다.
+새 테스트를 만들면 `fun/` 안에 폴더를 하나 더 만들고 첫 화면 목록에 추가합니다.
 
 ## Cloudflare에 올리기 (GitHub 없이)
 1. dash.cloudflare.com → Compute(Workers & Pages) → 만들기 → Pages → "에셋 업로드(Upload assets)"
@@ -19,7 +21,7 @@
 ## 카카오톡 공유 켜기
 1. developers.kakao.com → 내 애플리케이션 → 앱 추가
 2. 앱 설정 > 플랫폼 > Web > 사이트 도메인에 `https://monojilab.com` 등록
-3. 앱 키 > JavaScript 키를 `office-mbti/js/config.js`의 `KAKAO_JS_KEY`에 넣고 다시 배포
+3. 앱 키 > JavaScript 키를 `fun/office-mbti/js/config.js`의 `KAKAO_JS_KEY`에 넣고 다시 배포
 
 ## 광고
 카카오 애드핏(adfit.kakao.com)에서 매체 등록(monojilab.com) → 광고단위 160x600, 320x50 생성 → `config.js`에 `AD_PROVIDER: 'adfit'`과 단위 ID 입력
