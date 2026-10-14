@@ -4,6 +4,9 @@
   const CH = window.CHARACTERS;
   const app = document.getElementById('app');
   const STORE_KEY = 'mbti_me_v1';
+  const FRIENDS_KEY = 'mbti_friends_v1';
+  const TYPE_ORDER = ['ISTJ', 'ISFJ', 'INFJ', 'INTJ', 'ISTP', 'ISFP', 'INFP', 'INTP',
+    'ESTP', 'ESFP', 'ENFP', 'ENTP', 'ESTJ', 'ESFJ', 'ENFJ', 'ENTJ'];
 
   const state = {
     name: '',
@@ -11,6 +14,7 @@
     idx: 0,
     me: loadMe(),
     friend: readFriendFromUrl(),
+    pick: { type: '', at: 'A' },
   };
 
   // ---------- 유틸 ----------
@@ -29,6 +33,15 @@
   }
   function saveMe(me) {
     try { localStorage.setItem(STORE_KEY, JSON.stringify(me)); } catch (e) { /* 저장 불가 환경 */ }
+  }
+  // 내가 케미를 확인한 동료 목록 (최근 순, 이 기기에만 저장)
+  function loadFriends() {
+    try { return JSON.parse(localStorage.getItem(FRIENDS_KEY)) || []; } catch (e) { return []; }
+  }
+  function rememberFriend(f) {
+    const key = x => `${x.name}|${x.type}-${x.at}${x.hidden ? '-h' : ''}`;
+    const list = [f, ...loadFriends().filter(x => key(x) !== key(f))].slice(0, 12);
+    try { localStorage.setItem(FRIENDS_KEY, JSON.stringify(list)); } catch (e) { /* 저장 불가 환경 */ }
   }
   function render(html) {
     app.innerHTML = `<div class="fade-in">${html}</div>`;
@@ -178,7 +191,7 @@
         <div><b>${f.name ? esc(f.name) + '님' : '동료'}</b>이 업무 케미를 보자고 초대했어요!<br>
         <span class="muted">${fc.name} · ${f.type}</span></div>
       </div>` : '';
-    const quick = f && state.me ? `<button class="btn secondary" data-act="quick">저장된 내 결과로 바로 케미 보기</button>` : '';
+    const quick = f && state.me ? `<button class="btn" data-act="quick">내 결과로 바로 케미 보기</button>` : '';
 
     render(`
       ${invite}
@@ -187,8 +200,8 @@
         <h1>회사에서 나는<br>어떤 직장인일까?</h1>
         <p class="muted">${Q.length}개 질문으로 MBTI 유형을 알아보고<br>40가지 직장인 유형 중 나는 누구인지 알려드려요.</p>
         <input class="input" id="name" maxlength="10" placeholder="닉네임 (선택, 케미 결과에 표시돼요)" value="${esc(state.name)}">
-        <button class="btn" data-act="start">테스트 시작하기</button>
         ${quick}
+        <button class="btn${quick ? ' secondary' : ''}" data-act="start">${quick ? '테스트 다시 하기' : '테스트 시작하기'}</button>
         <button class="btn ghost" data-act="dex">40가지 직장인 유형 전체 보기</button>
       </section>
       <p class="muted center">약 2분 소요 · 결과는 이 기기에만 저장돼요</p>
@@ -271,6 +284,7 @@
     const f = state.friend;
     let compatHtml = '';
     if (f) {
+      rememberFriend(f);
       const fc = charOf(f);
       const r = compat(me, f);
       compatHtml = `
@@ -287,6 +301,17 @@
           <button class="btn kakao" data-act="kakao-back">💬 ${f.name ? esc(f.name) + '님에게' : '동료에게'} 내 결과 보내기</button>
         </section>`;
     }
+
+    const others = loadFriends();
+    const historyHtml = others.length ? `
+        <div class="history">
+          <p class="muted small">케미 본 동료</p>
+          <div class="chips">${others.map((x, i) => {
+            const xc = charOf(x);
+            const sc = compat(me, x).score;
+            return `<button class="chip" data-hist="${i}">${xc.emoji} ${x.name ? esc(x.name) : x.type} <b>${sc}점</b></button>`;
+          }).join('')}</div>
+        </div>` : '';
 
     const best = (window.BEST_MATCH[me.type] || []).slice(0, 2);
     const matchHtml = best.map(t => {
@@ -324,9 +349,25 @@
 
       ${matchHtml ? `<section class="card"><h3>💞 나와 손발이 잘 맞는 동료</h3><div class="match-grid">${matchHtml}</div></section>` : ''}
 
-      <section class="card center">
+      <section class="card center" id="chem">
         <h3>동료와 케미 보기</h3>
-        <p class="muted">링크를 받은 동료가 테스트를 하면<br>같은 팀일 때 케미 점수가 바로 나와요.</p>
+        <p class="muted">동료의 MBTI를 알면 고르기만 하면 바로 나와요.</p>
+        <input class="input" id="fname" maxlength="10" placeholder="동료 이름 (선택)">
+        <div class="type-grid">
+          ${TYPE_ORDER.map(t => `<button class="type-btn${state.pick.type === t ? ' on' : ''}" data-type="${t}">${t}</button>`).join('')}
+        </div>
+        <div class="seg" role="group" aria-label="A/T">
+          <button data-at="A" class="${state.pick.at === 'A' ? 'on' : ''}">확신형 A</button>
+          <button data-at="T" class="${state.pick.at === 'T' ? 'on' : ''}">신중형 T</button>
+        </div>
+        <p class="muted small">A/T를 모르면 그냥 두셔도 돼요.</p>
+        <button class="btn" data-act="pick-go" ${state.pick.type ? '' : 'disabled'}>케미 보기</button>
+        ${historyHtml}
+      </section>
+
+      <section class="card center">
+        <h3>MBTI를 모르는 동료라면</h3>
+        <p class="muted">링크를 보내면 동료가 테스트를 마치는 순간<br>둘의 케미 점수가 바로 나와요.</p>
         <button class="btn kakao" data-act="kakao">💬 카카오톡으로 공유하기</button>
         <div class="row">
           <button class="btn secondary" data-act="copy">🔗 링크 복사</button>
@@ -344,6 +385,32 @@
     on('native', () => shareNative(me));
     on('retry', () => { state.answers.fill(null); state.idx = 0; viewHome(); });
     on('dex', () => viewDex());
+
+    // 동료 MBTI 직접 고르기
+    const go = app.querySelector('[data-act="pick-go"]');
+    app.querySelectorAll('.type-btn').forEach(b => {
+      b.onclick = () => {
+        state.pick.type = b.dataset.type;
+        app.querySelectorAll('.type-btn').forEach(x => x.classList.toggle('on', x === b));
+        go.disabled = false;
+      };
+    });
+    app.querySelectorAll('.seg button').forEach(b => {
+      b.onclick = () => {
+        state.pick.at = b.dataset.at;
+        app.querySelectorAll('.seg button').forEach(x => x.classList.toggle('on', x === b));
+      };
+    });
+    go.onclick = () => {
+      if (!state.pick.type) return;
+      const name = document.getElementById('fname').value.trim().slice(0, 10);
+      state.friend = { type: state.pick.type, at: state.pick.at, hidden: false, name };
+      state.pick = { type: '', at: 'A' };
+      viewResult(me);
+    };
+    app.querySelectorAll('[data-hist]').forEach(b => {
+      b.onclick = () => { state.friend = others[Number(b.dataset.hist)]; viewResult(me); };
+    });
   }
 
   // ---------- 화면: 도감 ----------

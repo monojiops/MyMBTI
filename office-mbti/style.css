@@ -219,3 +219,19 @@ h3 { font-size: 16px; margin: 0 0 8px; }
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 .fade-in { animation: fade .35s ease; }
 @keyframes fade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+/* ---------- 동료 MBTI 직접 고르기 ---------- */
+.type-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin: 12px 0 10px; }
+.type-btn, .seg button, .chip {
+  border: 1.5px solid var(--line); background: #fff; color: var(--text);
+  border-radius: 12px; padding: 10px 0; font-size: 14px; font-weight: 700; cursor: pointer;
+}
+.type-btn.on, .seg button.on { border-color: var(--primary); background: #efeaff; color: var(--primary); }
+.seg { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.seg button { font-weight: 600; font-size: 13px; }
+.small { font-size: 12px; margin: 6px 0 12px; }
+.btn:disabled { opacity: .45; cursor: default; }
+.history { margin-top: 16px; text-align: left; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { padding: 7px 12px; border-radius: 99px; font-weight: 500; font-size: 13px; }
+.chip b { color: var(--primary); }
