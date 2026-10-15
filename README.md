@@ -32,3 +32,9 @@
 메추 화면의 그림은 Google Noto Emoji(Apache License 2.0) SVG를 `fun/assets/emoji/`에 넣어 쓴 거예요. 파일 이름은 이모지 코드포인트(예: 1f355.svg)이고, 새 이모지를 쓰면 `https://fonts.gstatic.com/s/e/notoemoji/latest/<코드>/emoji.svg`에서 받아 넣으면 돼요. 파일이 없으면 글자 이모지로 보여요.
 
 카톡 공유 이미지(800x400)는 `tools/make-share-images.js`로 만들어요. 메추는 `fun/<메추>/share/<메뉴id>.png`, 직장인 MBTI는 `fun/office-mbti/share/<유형>.png`이고 각 페이지 og.png도 같이 다시 만들어져요. 메뉴나 유형을 추가하면 로컬 서버(python3 -m http.server 8765)를 켠 채로 다시 실행하세요.
+
+운세 탭은 `fortune/`에 따로 있어요 (홈페이지 메뉴 '운세').
+- `fortune/saju/` 오늘의 사주: 양력 생년월일(+시진)로 네 기둥을 계산하고 일간 풀이, 오행, 오늘의 운세(오늘 일진과의 십신)를 보여줘요. 절기는 평균 날짜를 쓰는 간이 계산이에요. 생년월일은 저장하지 않고 공유 링크에도 일간만 넣어요.
+- `fortune/tarot/` 타로: 메이저 아르카나 22장, 주제 4개(오늘, 연애, 일, 돈), 한 장 또는 세 장.
+- 공통 코드 `fortune/assets/common.js`, 스타일은 `/fun/assets/menu.css` + `fortune/assets/fortune.css`, 그림은 `/fun/assets/emoji/`를 같이 써요.
+- 공유 이미지는 `tools/make-fortune-images.js`로 만들어요.
