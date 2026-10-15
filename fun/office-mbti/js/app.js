@@ -66,7 +66,7 @@
         <div class="more-grid">${items.map(([p, em, t, sub]) => `<a class="more-card" href="../${p}/">${ic(em, 'em')}<b>${t}</b><small>${sub}</small></a>`).join('')}</div>
         <a class="more-wide" href="../drink/">${ic('🍻', 'em')}<div><b>술메추</b><small>오늘 한잔, 뭐 마실까? (성인)</small></div></a>
       </section>
-      <p class="foot"><a href="../">monojilab fun</a></p>`;
+      <p class="foot"><a href="../">monojilab fun</a> · <a href="/privacy/">개인정보처리방침</a> · <a href="/contact/">문의</a></p>`;
   }
 
   // ---------- 결과 계산 ----------

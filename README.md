@@ -6,6 +6,7 @@
 - `fun/` 재밌는 콘텐츠 모음 → https://monojilab.com/fun/
 - `fun/office-mbti/` MBTI 직장인 유형 테스트 → https://monojilab.com/fun/office-mbti/
 - 메추 시리즈: `fun/lunch/` 점메추, `fun/dinner/` 저메추, `fun/dessert/` 디메추, `fun/drink/` 술메추, `fun/night/` 야메추, `fun/stretch/` 오늘의 스트레칭 (같은 엔진, THEME.noMap으로 지도 버튼 숨김, 항목의 steps로 따라 하기 순서 표시)
+- `privacy/` 개인정보처리방침, `contact/` 문의하기 (모든 페이지 아래쪽에 링크)
   - 공통 화면과 추천 로직은 `fun/assets/menu.js`, `fun/assets/menu.css`
   - 각 폴더의 `js/config.js`(제목, 색, 문구)와 `js/data.js`(질문, 메뉴)만 다르게 둬요. 새 메추는 폴더를 복사해서 이 두 파일만 바꾸면 돼요
 - `office-mbti/`, `lab/` 예전 주소. 새 주소로 넘겨주는 페이지만 남아 있어요

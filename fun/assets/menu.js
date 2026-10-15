@@ -325,7 +325,7 @@
         <div class="more-grid">${items}</div>
         <a class="more-wide" href="../office-mbti/">${ic('💼', 'em')}<div><b>MBTI 직장인 유형 테스트</b><small>회사에서 나는 어떤 직장인일까?</small></div></a>
       </section>
-      <p class="foot"><a href="../">monojilab fun</a></p>`;
+      <p class="foot"><a href="../">monojilab fun</a> · <a href="/privacy/">개인정보처리방침</a> · <a href="/contact/">문의</a></p>`;
   }
 
   // ---------- 광고 ----------
