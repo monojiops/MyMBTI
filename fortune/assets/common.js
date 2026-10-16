@@ -37,7 +37,7 @@ window.FX = (() => {
       <section>
         <h3>이것도 해보세요</h3>
         ${items}
-        <a class="more-wide" href="/fun/">${ic('🍱', 'em')}<div><b>오늘 뭐 먹지?</b><small>점메추, 저메추, 직장인 MBTI 등 재밌는 콘텐츠</small></div></a>
+        <a class="more-wide" href="/fun/">${ic('🍱', 'em')}<div><b>오늘 뭐 먹지?</b><small>점메추, 저메추, 직장인 유형 테스트 등 재밌는 콘텐츠</small></div></a>
       </section>
       <p class="foot"><a href="../">monojilab 운세</a> · <a href="/privacy/">개인정보처리방침</a> · <a href="/contact/">문의</a><br>재미로만 봐주세요</p>`;
   }

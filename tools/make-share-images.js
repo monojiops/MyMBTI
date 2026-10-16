@@ -1,7 +1,7 @@
 // 메추 카톡 공유 이미지 만들기 (800x400)
 //  - fun/<메추>/share/<메뉴id>.png : 메뉴별 이미지 (결과 공유할 때 씀)
 //  - fun/<메추>/og.png              : 페이지 대표 이미지
-//  - fun/office-mbti/share/<유형>.png, og.png : 직장인 MBTI 유형별 이미지
+//  - fun/office-type/share/<유형>.png, og.png : 직장인 유형 테스트 유형별 이미지
 // 실행: (특정 페이지만: ONLY=stretch) 저장소 폴더에서 python3 -m http.server 8765 를 켜고
 //       NODE_PATH=$(npm root -g) node tools/make-share-images.js
 // 카톡이 가운데를 잘라도 보이게 그림과 글자는 가운데 400px 안에 둬요.
@@ -9,7 +9,8 @@ const { chromium } = require('playwright');
 const fs = require('fs');
 const path = require('path');
 const BASE = 'http://localhost:8765';
-const TYPES = (process.env.ONLY || 'lunch,dinner,dessert,drink,night,stretch').split(',');
+const ONLY = (process.env.ONLY || 'lunch,dinner,dessert,drink,night,stretch,office').split(',');
+const TYPES = ONLY.filter(t => t !== 'office');
 
 function cp(em) { return Array.from(em).map(c => c.codePointAt(0)).filter(c => c !== 0xfe0f).map(c => c.toString(16)).join('_'); }
 function esc(s) { return String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])); }
@@ -60,13 +61,13 @@ function page(T, main, side, title, sub, accent) {
     console.log(t, M.length);
   }
 
-  // 직장인 MBTI (ONLY로 특정 페이지만 만들 때는 건너뜀)
-  if (!process.env.ONLY)
+  // 직장인 유형 테스트 (ONLY에 office가 있을 때)
+  if (ONLY.includes('office'))
   {
     const ctx = {};
-    new Function('window', fs.readFileSync('fun/office-mbti/js/data.js', 'utf8'))(ctx);
+    new Function('window', fs.readFileSync('fun/office-type/js/data.js', 'utf8'))(ctx);
     const CH = ctx.CHARACTERS;
-    const outDir = path.join('fun', 'office-mbti', 'share');
+    const outDir = path.join('fun', 'office-type', 'share');
     fs.mkdirSync(outDir, { recursive: true });
     const tint = hex => { const n = parseInt(hex.slice(1), 16); const mix = c => Math.round(c + (255 - c) * 0.88); return `rgb(${mix(n >> 16)},${mix((n >> 8) & 255)},${mix(n & 255)})`; };
     const shot = async (html, out) => {
@@ -75,13 +76,13 @@ function page(T, main, side, title, sub, accent) {
       await p.screenshot({ path: out });
     };
     const ids = Object.keys(CH);
-    await shot(page({ soft: '#eef3ff' }, '💼', ['📊', '🍪', '🚀', '🎤'], '나는 어떤 직장인일까?', `직장인 MBTI · ${ids.length}가지 유형`, '#3b5bdb'), 'fun/office-mbti/og.png');
+    await shot(page({ soft: '#eef3ff' }, '💼', ['📊', '🍪', '🚀', '🎤'], '나는 어떤 직장인일까?', `직장인 유형 테스트 · ${ids.length}가지 유형`, '#3b5bdb'), 'fun/office-type/og.png');
     for (const id of ids) {
       const c = CH[id];
       const label = c.hidden ? '히든 유형' : id;
       await shot(page({ soft: tint(c.color) }, c.emoji, [], c.name, `${label} · 우리 팀 케미는 몇 점?`, c.color), path.join(outDir, id + '.png'));
     }
-    console.log('office-mbti', ids.length);
+    console.log('office-type', ids.length);
   }
   await b.close();
 })();

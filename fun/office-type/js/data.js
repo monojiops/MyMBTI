@@ -117,7 +117,7 @@ window.CHARACTERS = {
     desc: '놀 땐 놀고 할 땐 하는, 흐름을 타는 데 능한 사람. 어디서 일해도 금방 자기 리듬을 찾아요.', keys: ['유연함', '자유', '감각'] },
 };
 
-// 서로 잘 맞는다고 알려진 조합 (대중적인 MBTI 궁합표 기반)
+// 서로 잘 맞는다고 알려진 조합 (대중적인 16유형 궁합표 기반)
 window.BEST_MATCH = {
   INFP: ['ENFJ', 'ENTJ'], ENFP: ['INFJ', 'INTJ'], INFJ: ['ENFP', 'ENTP'], ENFJ: ['INFP', 'ISFP'],
   INTJ: ['ENFP', 'ENTP'], ENTJ: ['INFP', 'INTP'], INTP: ['ENTJ', 'ESTJ'], ENTP: ['INFJ', 'INTJ'],

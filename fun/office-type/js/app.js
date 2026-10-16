@@ -49,7 +49,7 @@
     return `<img class="ic ${cls || ''}" src="../assets/emoji/${cp}.svg" alt="${esc(em)}" draggable="false" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:this.className,textContent:this.alt}))">`;
   }
   function render(html, noMore) {
-    const top = `<div class="topbar"><a href="../">← monojilab fun</a><span>직장인 MBTI</span></div>`;
+    const top = `<div class="topbar"><a href="../">← monojilab fun</a><span>직장인 유형 테스트</span></div>`;
     app.innerHTML = `<div class="fade-in">${top}${html}${noMore ? '' : moreHtml()}</div>`;
     window.scrollTo({ top: 0 });
   }
@@ -66,7 +66,6 @@
         <div class="more-grid">${items.map(([p, em, t, sub]) => `<a class="more-card" href="../${p}/">${ic(em, 'em')}<b>${t}</b><small>${sub}</small></a>`).join('')}</div>
         <a class="more-wide" href="../drink/">${ic('🍻', 'em')}<div><b>술메추</b><small>오늘 한잔, 뭐 마실까? (성인)</small></div></a>
       </section>
-      <p class="foot" style="font-size:12px;padding-bottom:0">비공식 재미용 테스트 · MBTI®는 The Myers-Briggs Company의 등록상표예요.</p>
       <p class="foot"><a href="../">monojilab fun</a> · <a href="/privacy/">개인정보처리방침</a> · <a href="/contact/">문의</a></p>`;
   }
 
@@ -222,14 +221,14 @@
       <div class="hero">${['💼', '📊', '🎤', '☕', '💡'].map((e, k) => ic(e, 'h' + k)).join('')}</div>
       <section class="card center" style="padding-top:20px">
         <h1>회사에서 나는<br>어떤 직장인일까?</h1>
-        <p class="muted">${Q.length}개 질문으로 MBTI 유형을 알아보고<br>40가지 직장인 유형 중 나는 누구인지 알려드려요.</p>
+        <p class="muted">${Q.length}개 질문으로 16가지 성격 유형을 알아보고<br>40가지 직장인 유형 중 나는 누구인지 알려드려요.</p>
         <input class="input" id="name" maxlength="10" placeholder="닉네임 (선택, 케미 결과에 표시돼요)" value="${esc(state.name)}">
         ${quick}
         <button class="btn${quick ? ' secondary' : ''}" data-act="start">${quick ? '테스트 다시 하기' : '테스트 시작하기'}</button>
         <button class="btn ghost" data-act="dex">40가지 직장인 유형 전체 보기</button>
       </section>
       <p class="muted center">약 2분 소요 · 결과는 이 기기에만 저장돼요</p>
-      <p class="muted center" style="font-size:12px">재미로 만든 비공식 테스트예요. MBTI®는 The Myers-Briggs Company의 등록상표이며, 이 테스트는 공식 MBTI 검사와 관련이 없어요.</p>
+      <p class="muted center" style="font-size:12px">재미로 만든 비공식 성격 유형 테스트예요.</p>
     `);
     app.querySelector('[data-act="start"]').onclick = () => {
       state.name = document.getElementById('name').value.trim().slice(0, 10);
@@ -376,7 +375,7 @@
 
       <section class="card center" id="chem">
         <h3>동료와 케미 보기</h3>
-        <p class="muted">동료의 MBTI를 알면 고르기만 하면 바로 나와요.</p>
+        <p class="muted">동료의 성격 유형(ENFP 같은 네 글자)을 알면 고르기만 하면 바로 나와요.</p>
         <input class="input" id="fname" maxlength="10" placeholder="동료 이름 (선택)">
         <div class="type-grid">
           ${TYPE_ORDER.map(t => `<button class="type-btn${state.pick.type === t ? ' on' : ''}" data-type="${t}">${t}</button>`).join('')}
@@ -391,7 +390,7 @@
       </section>
 
       <section class="card center">
-        <h3>MBTI를 모르는 동료라면</h3>
+        <h3>유형을 모르는 동료라면</h3>
         <p class="muted">링크를 보내면 동료가 테스트를 마치는 순간<br>둘의 케미 점수가 바로 나와요.</p>
         <button class="btn kakao" data-act="kakao">카카오톡으로 공유하기</button>
         <div class="row">
@@ -411,7 +410,7 @@
     on('retry', () => { state.answers.fill(null); state.idx = 0; viewHome(); });
     on('dex', () => viewDex());
 
-    // 동료 MBTI 직접 고르기
+    // 동료 유형 직접 고르기
     const go = app.querySelector('[data-act="pick-go"]');
     app.querySelectorAll('.type-btn').forEach(b => {
       b.onclick = () => {

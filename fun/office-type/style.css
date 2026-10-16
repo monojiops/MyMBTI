@@ -231,7 +231,7 @@ h3 { font-size: 16px; margin: 0 0 8px; }
 .fade-in { animation: fade .35s ease; }
 @keyframes fade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
 
-/* ---------- 동료 MBTI 직접 고르기 ---------- */
+/* ---------- 동료 유형 직접 고르기 ---------- */
 .type-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin: 12px 0 10px; }
 .type-btn, .seg button, .chip {
   border: 1px solid var(--line); background: #fff; color: var(--text);
