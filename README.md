@@ -37,5 +37,6 @@
 운세 탭은 `fortune/`에 따로 있어요 (홈페이지 메뉴 '운세').
 - `fortune/saju/` 오늘의 사주: 양력 생년월일(+시진)로 네 기둥을 계산하고 일간 풀이, 오행, 오늘의 운세(오늘 일진과의 십신)를 보여줘요. 절기는 평균 날짜를 쓰는 간이 계산이에요. 생년월일은 저장하지 않고 공유 링크에도 일간만 넣어요.
 - `fortune/tarot/` 타로: 메이저 아르카나 22장, 주제 4개(오늘, 연애, 일, 돈), 한 장 또는 세 장.
+- `fortune/suneung/` 수능 응원 부적: 받는 수험생/보내는 사람 이름을 넣고 접힌 부적 6장 중 하나를 골라요. 부적 16장은 `js/data.js`, 수능 날짜(D-day)는 `js/config.js`의 EXAM_DATE. 공유 링크는 `?c=부적id&to=받는사람&fr=보낸사람`. 수능이 끝나면 /fun/ 목록의 '지금 시즌'에서 빼면 돼요.
 - 공통 코드 `fortune/assets/common.js`, 스타일은 `/fun/assets/menu.css` + `fortune/assets/fortune.css`, 그림은 `/fun/assets/emoji/`를 같이 써요.
 - 공유 이미지는 `tools/make-fortune-images.js`로 만들어요.

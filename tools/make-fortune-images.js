@@ -1,6 +1,7 @@
 // 운세 탭 카톡 공유 이미지 만들기 (800x400)
 //  - fortune/saju/share/<일간id>.png, fortune/saju/og.png
 //  - fortune/tarot/share/<카드id>.png, fortune/tarot/og.png
+//  - fortune/suneung/share/<부적id>.png, fortune/suneung/og.png
 // 실행: 저장소 폴더에서 python3 -m http.server 8765 를 켜고
 //       NODE_PATH=$(npm root -g) node tools/make-fortune-images.js
 const { chromium } = require('playwright');
@@ -41,6 +42,22 @@ function cardPage(c) {
   <div class="t">${esc(c.name)}</div><div class="en">${esc(c.en)}</div><div class="tag">monojilab.com</div></body></html>`;
 }
 
+// 수능 부적: 가운데 노란 부적, 아래에 이름
+function charmPage(c) {
+  return `<!doctype html><html><head>${HEAD}<style>${BASE_CSS}
+    body{background:#fff6d6} .tag{color:#c92a2a}
+    .ch{position:absolute;left:50%;top:26px;margin-left:-84px;width:168px;height:276px;border-radius:8px;background:#f7d64a;box-shadow:inset 0 0 0 8px #f7d64a,inset 0 0 0 10.5px #c92a2a;display:flex;align-items:center;justify-content:center;color:#c92a2a}
+    .ch .ct{position:absolute;top:22px;font-size:17px;letter-spacing:3px}
+    .ch img{width:100px;height:100px}
+    .ch .seal{position:absolute;bottom:22px;border:2.5px solid #c92a2a;border-radius:5px;padding:0 8px;font-size:18px;transform:rotate(-6deg)}
+    .t{top:318px;font-size:34px} .s{display:none}
+    .dd{position:absolute;left:0;right:0;top:362px;text-align:center;font-family:'Gowun Dodum';font-size:16px;color:#888}
+  </style></head><body>
+  <div class="ch"><span class="ct">수능 부적</span>${img(c.em, '')}<span class="seal">합격</span></div>
+  ${['🍀', '⭐', '✏️', '🎯'].map((e, k) => img(e, 'd d' + k)).join('')}
+  <div class="t">${esc(c.name)}</div><div class="dd">수험생 모두 응원해요</div><div class="tag">monojilab.com</div></body></html>`;
+}
+
 (async () => {
   const b = await chromium.launch();
   const p = await b.newPage({ viewport: { width: 800, height: 400 } });
@@ -64,5 +81,10 @@ function cardPage(c) {
   await shot(iconPage('#f1edff', '#5f3dc4', '🔮', ['⭐', '🌙', '☀️', '🃏'], '타로 한 장', '마음이 가는 카드가 알려주는 오늘'), 'fortune/tarot/og.png');
   for (const c of tr.CARDS) await shot(cardPage(c), `fortune/tarot/share/${c.id}.png`);
   console.log('tarot', tr.CARDS.length);
+
+  const sn = load('fortune/suneung');
+  await shot(iconPage('#fff6d6', '#c92a2a', '📜', ['🍀', '⭐', '✏️', '🎯'], '수능 응원 부적', '수험생에게 응원 부적을 보내주세요'), 'fortune/suneung/og.png');
+  for (const c of sn.CHARMS) await shot(charmPage(c), `fortune/suneung/share/${c.id}.png`);
+  console.log('suneung', sn.CHARMS.length);
   await b.close();
 })();
