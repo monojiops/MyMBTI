@@ -13,6 +13,7 @@ window.FX = (() => {
   const FAMILY = [
     { path: 'saju', em: '☯️', title: '오늘의 사주', sub: '내 사주와 오늘의 운세' },
     { path: 'tarot', em: '🔮', title: '타로 한 장', sub: '카드가 알려주는 오늘' },
+    { path: 'suneung', em: '📜', title: '수능 응원 부적', sub: '수험생에게 부적 보내기' },
   ];
 
   function esc(s) {

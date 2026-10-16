@@ -72,3 +72,30 @@ select.input { appearance: none; -webkit-appearance: none; background: #fff url(
 .kw span { background: var(--soft); color: #555; padding: 4px 10px; border-radius: 8px; font-size: 13px; }
 .seg3 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .seg3 .choice { justify-content: center; }
+
+/* 수능 부적 */
+.charm {
+  position: relative; width: 136px; aspect-ratio: 1 / 1.75; margin: 0 auto;
+  background: #f7d64a; border-radius: 6px;
+  box-shadow: inset 0 0 0 7px #f7d64a, inset 0 0 0 9px #c92a2a;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; color: #c92a2a;
+}
+.charm .ct { position: absolute; top: 16px; left: 0; right: 0; text-align: center; font-family: 'Jua', sans-serif; font-size: 13px; letter-spacing: 2px; }
+.charm .ic { width: 64px; height: 64px; font-size: 52px; }
+.charm .cn { font-family: 'Jua', sans-serif; font-weight: 400; font-size: 15px; padding: 0 12px; text-align: center; word-break: keep-all; line-height: 1.25; }
+.charm .seal { position: absolute; bottom: 14px; left: 50%; transform: translateX(-50%) rotate(-6deg); border: 2px solid #c92a2a; border-radius: 4px; padding: 0 6px; font-family: 'Jua', sans-serif; font-size: 13px; }
+.charm.big { width: 180px; }
+.charm.big .ic { width: 88px; height: 88px; font-size: 70px; }
+.charm.big .cn { font-size: 21px; }
+.charm.big .ct, .charm.big .seal { font-size: 15px; }
+.charm-power { font-size: 16px; margin: 16px 0 0; word-break: keep-all; }
+.charm-msg { margin-top: 12px; padding: 14px 16px; border-radius: 14px; background: var(--tint); font-family: 'Jua', sans-serif; font-size: 17px; word-break: keep-all; }
+.charm-deck { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 18px; }
+.charm-back {
+  aspect-ratio: 1 / 1.6; border: 0; border-radius: 6px; padding: 0; background: #f7d64a;
+  box-shadow: inset 0 0 0 5px #f7d64a, inset 0 0 0 6.5px #c92a2a;
+  color: #c92a2a; font-size: 34px; font-family: serif; transition: transform .2s ease, opacity .2s;
+}
+.charm-back:active { transform: scale(.96); }
+.charm-back.chosen { transform: scale(1.08) rotate(-2deg); }
+.charm-back.dim { opacity: .25; }
