@@ -66,6 +66,7 @@
         <div class="more-grid">${items.map(([p, em, t, sub]) => `<a class="more-card" href="../${p}/">${ic(em, 'em')}<b>${t}</b><small>${sub}</small></a>`).join('')}</div>
         <a class="more-wide" href="../drink/">${ic('🍻', 'em')}<div><b>술메추</b><small>오늘 한잔, 뭐 마실까? (성인)</small></div></a>
       </section>
+      <p class="foot" style="font-size:12px;padding-bottom:0">비공식 재미용 테스트 · MBTI®는 The Myers-Briggs Company의 등록상표예요.</p>
       <p class="foot"><a href="../">monojilab fun</a> · <a href="/privacy/">개인정보처리방침</a> · <a href="/contact/">문의</a></p>`;
   }
 
@@ -228,6 +229,7 @@
         <button class="btn ghost" data-act="dex">40가지 직장인 유형 전체 보기</button>
       </section>
       <p class="muted center">약 2분 소요 · 결과는 이 기기에만 저장돼요</p>
+      <p class="muted center" style="font-size:12px">재미로 만든 비공식 테스트예요. MBTI®는 The Myers-Briggs Company의 등록상표이며, 이 테스트는 공식 MBTI 검사와 관련이 없어요.</p>
     `);
     app.querySelector('[data-act="start"]').onclick = () => {
       state.name = document.getElementById('name').value.trim().slice(0, 10);
